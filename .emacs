@@ -27,44 +27,44 @@
 ;  (semantic-load-enable-gaudy-code-helpers)
 
 ;; * This enables the use of Exuberant ctags if you have it installed.
-                                                ;;   If you use C++ templates or boost, you should NOT enable it.
-                                                ;  (semantic-load-enable-all-exuberent-ctags-support)
-                                                ;;   Or, use one of these two types of support.
-                                                ;;   Add support for new languages only via ctags.
-                                                ;  (semantic-load-enable-primary-exuberent-ctags-support)
-                                                ;;   Add support for using ctags as a backup parser.
-                                                ;  (semantic-load-enable-secondary-exuberent-ctags-support)
+;;   If you use C++ templates or boost, you should NOT enable it.
+                                        ;  (semantic-load-enable-all-exuberent-ctags-support)
+;;   Or, use one of these two types of support.
+;;   Add support for new languages only via ctags.
+                                        ;  (semantic-load-enable-primary-exuberent-ctags-support)
+;;   Add support for using ctags as a backup parser.
+                                        ;  (semantic-load-enable-secondary-exuberent-ctags-support)
 
-                                                ;; Enable SRecode (Template management) minor-mode.
-                                                ;  (global-srecode-minor-mode 1)
+;; Enable SRecode (Template management) minor-mode.
+                                        ;  (global-srecode-minor-mode 1)
 
-                                                ;;-----------
+;;-----------
 
-                                                ;==================================cedet dev ===================
-                                                ;; ;; ;; Load CEDET
-                                                ;; ;; ;; This should be near the top of your init file, so that this can
-                                                ;; ;; ;; really replace the CEDET that ships with Emacs proper.
-                                                ;;   (load-file "/home/algking/.emacs.d/plugin/cedet/cedet-devel-load.el")
-
-
-                                                ;; ;; ;; ;; Add further minor-modes to be enabled by semantic-mode.
-                                                ;; ;; ;; ;; See doc-string of `semantic-default-submodes' for other things
-                                                ;; ;; ;; ;; you can use here.
-                                                (add-to-list 'semantic-default-submodes 'global-semantic-idle-summary-mode t)
-                                                (add-to-list 'semantic-default-submodes 'global-semantic-mru-bookmark-mode t)
-                                                (add-to-list 'semantic-default-submodes 'global-semantic-idle-completions-mode t)
-
-                                                ;; ;; ;; ;; Enable Semantic
-                                                (semantic-mode 1)
-                                                ;;==============================================================
+                                        ;==================================cedet dev ===================
+;; ;; ;; Load CEDET
+;; ;; ;; This should be near the top of your init file, so that this can
+;; ;; ;; really replace the CEDET that ships with Emacs proper.
+;;   (load-file "/home/algking/.emacs.d/plugin/cedet/cedet-devel-load.el")
 
 
-                                                (setq
-                                                 backup-by-copying t ; 自动备份
+;; ;; ;; ;; Add further minor-modes to be enabled by semantic-mode.
+;; ;; ;; ;; See doc-string of `semantic-default-submodes' for other things
+;; ;; ;; ;; you can use here.
+;; (add-to-list 'semantic-default-submodes 'global-semantic-idle-summary-mode t)
+;; (add-to-list 'semantic-default-submodes 'global-semantic-mru-bookmark-mode t)
+;; (add-to-list 'semantic-default-submodes 'global-semantic-idle-completions-mode t)
 
-                                                 backup-directory-alist
+;; ;; ;; ;; ;; Enable Semantic
+;; (semantic-mode 1)
+;;==============================================================
 
-                                                 '(("." . "~/.saves")) ; 自动备份在目录"~/.saves"下
+(load-file "~/.emacs.d/plugin/dash-functional.el")
+(setq
+ backup-by-copying t ; 自动备份
+
+ backup-directory-alist
+
+ '(("." . "~/.saves")) ; 自动备份在目录"~/.saves"下
 
 ;   delete-old-versions nil ; 自动删除旧的备份文件
 
@@ -101,13 +101,13 @@
 ; (url-retrieve "https://raw.github.com/dimitri/el-get/master/el-get-install.el" (lambda (s) (let (el-get-master-branch) (goto-char (point-max)) (eval-print-last-sexp))))
 ;--------------------------------------
 (load-file "~/.emacs.d/prelude/init.el")
-(setq global-hl-line-sticky-flag nil)
-(global-hl-line-mode 0)
-(load-file "~/.emacs.d/el-get/.loaddefs.el")
-(add-to-list 'load-path "~/.emacs.d/el-get/el-get")
-(require 'el-get)
-(setq prelude-whitespace nil)
-;; local sources
+;; (setq global-hl-line-sticky-flag nil)
+;; (global-hl-line-mode 0)
+;; (load-file "~/.emacs.d/el-get/.loaddefs.el")
+;; (add-to-list 'load-path "~/.emacs.d/el-get/el-get")
+;; (require 'el-get)
+;; (setq prelude-whitespace nil)
+;; ;; local sources
 ;; (setq el-get-sources
     ;;       '((:name magit
                 ;;             :after (lambda () (global-set-key (kbd "C-x C-z") 'magit-status)))
@@ -951,7 +951,7 @@ and when jumping back, it will be removed.")
    (or (package-installed-p package)
        (if (y-or-n-p (format "Package %s is missing. Install it? " package))
            (package-install package))))
- '( magit rainbow-mode deft))
+ '( magit rainbow-mode dash deft))
 
 (require 'dired-x)
 (require 'ignoramus)
