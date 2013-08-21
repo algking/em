@@ -22,3 +22,5 @@ ede-projects.el
 .DS_Store
 places
 .smex-items
+/.org-id-locations
+/bookmarks

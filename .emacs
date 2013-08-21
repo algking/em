@@ -89,52 +89,26 @@
 ;(require 'cedet)
 ;(semantic-mode 1)
 
+
 (add-to-list 'load-path "~/.emacs.d/el-get/el-get")
 
-(unless (require 'el-get nil t)
-          (url-retrieve
-           "https://raw.github.com/dimitri/el-get/master/el-get-install.el"
-             (lambda (s)
-                       (goto-char (point-max))
-                         (eval-print-last-sexp))))
+(unless (require 'el-get nil 'noerror)
+  (with-current-buffer
+      (url-retrieve-synchronously
+       "https://raw.github.com/dimitri/el-get/master/el-get-install.el")
+    (goto-char (point-max))
+    (eval-print-last-sexp)))
 
-; (url-retrieve "https://raw.github.com/dimitri/el-get/master/el-get-install.el" (lambda (s) (let (el-get-master-branch) (goto-char (point-max)) (eval-print-last-sexp))))
+(add-to-list 'el-get-recipe-path "~/.emacs.d/el-get/el-get/recipes")
+;; (el-get 'sync)
 ;--------------------------------------
 (load-file "~/.emacs.d/prelude/init.el")
-;; (setq global-hl-line-sticky-flag nil)
-;; (global-hl-line-mode 0)
-;; (load-file "~/.emacs.d/el-get/.loaddefs.el")
-;; (add-to-list 'load-path "~/.emacs.d/el-get/el-get")
-;; (require 'el-get)
-;; (setq prelude-whitespace nil)
-;; ;; local sources
-;; (setq el-get-sources
-    ;;       '((:name magit
-                ;;             :after (lambda () (global-set-key (kbd "C-x C-z") 'magit-status)))
-
-;;      (:name asciidoc
-;;             :type elpa
-;;             :after (lambda ()
-;;                      (autoload 'doc-mode "doc-mode" nil t)
-;;                      (add-to-list 'auto-mode-alist '("\\.adoc$" . doc-mode))
-;;                      (add-hook 'doc-mode-hook '(lambda ()
-;;                                                  (turn-on-auto-fill)
-;;                                                  (require 'asciidoc)))))
-
-;;      (:name lisppaste        :type elpa)
-;;         (:name emacs-goodies-el :type apt-get)))
-
-;; (setq my-packages
-;;       (append
-;;        '(cssh el-get switch-window vkill google-maps  xcscope )
-;;        (mapcar 'el-get-source-name el-get-sources)))
-
-;; (el-get 'sync my-packages)
-
-;; (setq stack-trace-on-error nil)
-;;-----------------------------------------------------------------------------------
+(setq global-hl-line-sticky-flag nil)
+(global-hl-line-mode 0)
+(setq stack-trace-on-error nil)
+;;------------------------------------------------------------------------------
 ;;erlang 配置
-;;--------------------------------------------------------------------------------------
+;;------------------------------------------------------------------------------
 (load-file "~/.emacs.d/.emacs-erlang")
 
 ;; =================================================================
@@ -953,6 +927,79 @@ and when jumping back, it will be removed.")
            (package-install package))))
  '( magit rainbow-mode dash deft))
 
+(prelude-require-packages
+ '(
+   company
+   ac-js2
+   alpha
+   auto-complete
+   cl-lib
+   company
+   dash
+   deft
+   dired+
+   edit-server
+   etags-select
+   find-file-in-project
+   flymake-cursor
+   flymake-php
+   flymake-phpcs
+   ghc
+   ghci-completion
+   gist
+   git-commit-mode
+   gitconfig-mode
+   gitignore-mode
+   git-rebase-mode
+   haskell-mode
+   helm
+   helm-projectile
+   ignoramus
+   imenu-anywhere
+   inf-ruby
+   isearch+
+   js2-mode
+   js2-refactor
+   js-comint
+   logito
+   magit
+   melpa
+   multiple-cursors
+   org
+   outline-magic
+   php+-mode
+   php-mode
+   plantuml-mode
+   popup
+   popwin
+   psvn
+   session
+   shell-pop
+   skewer-mode
+   skewer-mode
+   slime
+   slime-js
+   slime-repl
+   smex
+   w3m
+   web
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   )  )
 (require 'dired-x)
 (require 'ignoramus)
 
