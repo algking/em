@@ -1,10 +1,8 @@
-# -*- mode: snippet -*-
-# name: try1 ... of ... end
-# key: try1
+# name: try ... of ... catch after end
+# key: try
 # --
-try
-$1 
+try $1 of
+    $0
 catch
-  E:R ->
-$0
+after
 end

@@ -105,7 +105,7 @@
 (load-file "~/.emacs.d/prelude/init.el")
 (setq global-hl-line-sticky-flag nil)
 (global-hl-line-mode 0)
-(setq stack-trace-on-error nil)
+(setq stack-trace-on-error t)
 ;;------------------------------------------------------------------------------
 ;;erlang 配置
 ;;------------------------------------------------------------------------------
@@ -1006,3 +1006,5 @@ and when jumping back, it will be removed.")
 (ignoramus-setup)    ; sets `vc-directory-exclusion-list',
                                         ; `dired-omit-files', `ido-ignore-directories',
                                         ; `completion-ignored-extensions', etc.
+(require 'yasnippet)
+(yas-global-mode 1)
