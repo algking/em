@@ -1,0 +1,3 @@
+[submodule "el-get/company-distel"]
+	path = el-get/company-distel
+	url = https://github.com/algking/company-distel.git
