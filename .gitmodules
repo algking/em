@@ -14,3 +14,16 @@
 	path = plugin/evelnote-for-evernote
 	url = https://github.com/f-kubotar/evelnote-for-evernote.git
     
+[submodule "plugin/everbox"]
+	path = plugin/everbox
+	url = https://github.com/xumingming/everbox.git
+
+[submodule "plugin/wrangler"]
+	path = plugin/wrangler
+	url = https://github.com/RefactoringTools/wrangler.git
+
+[submodule "plugin/swank-js"]
+	path = plugin/swank-js
+	url = https://github.com/swank-js/swank-js.git 
+
+
