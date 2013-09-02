@@ -34,3 +34,7 @@
 	path = plugin/flymake/eflymake
 	url = git://github.com/retnuh/eflymake.git
     
+[submodule "plugin/weibo.emacs"]
+	path = plugin/weibo.emacs
+	url = https://github.com/austin-----/weibo.emacs.git
+    
