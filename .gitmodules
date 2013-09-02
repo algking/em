@@ -29,16 +29,8 @@
 [submodule "plugin/flymake/eflymake"]
 	path = plugin/flymake/eflymake
 	url = https://github.com/purcell/flymake-shell.git
-
-[submodule "plugin/flymake/eflymake"]
-	path = plugin/flymake/eflymake
-	url = https://github.com/purcell/flymake-shell.git
     
 [submodule "plugin/flymake/eflymake"]
 	path = plugin/flymake/eflymake
 	url = git://github.com/retnuh/eflymake.git
     
-[submodule "plugin/flymake/flymake-shell"]
-	path = plugin/flymake/flymake-shell
-	url = https://github.com/purcell/flymake-shell.git
- 
