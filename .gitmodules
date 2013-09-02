@@ -26,8 +26,8 @@
 	path = plugin/swank-js
 	url = https://github.com/swank-js/swank-js.git 
 
-[submodule "plugin/flymake/eflymake"]
-	path = plugin/flymake/eflymake
+[submodule "plugin/flymake/flymake-shell"]
+	path = plugin/flymake/flymake-shell
 	url = https://github.com/purcell/flymake-shell.git
     
 [submodule "plugin/flymake/eflymake"]
