@@ -1,3 +1,16 @@
 [submodule "el-get/company-distel"]
 	path = el-get/company-distel
 	url = https://github.com/algking/company-distel.git
+    
+[submodule "el-get/distel"]
+	path = el-get/distel
+	url = https://github.com/algking/distel.git
+    
+[submodule "el-get/el-get"]
+	path = el-get/el-get
+	url = http://github.com/dimitri/el-get.git
+
+[submodule "plugin/evelnote-for-evernote"]
+	path = plugin/evelnote-for-evernote
+	url = https://github.com/f-kubotar/evelnote-for-evernote.git
+    
