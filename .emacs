@@ -431,6 +431,7 @@ and when jumping back, it will be removed.")
 (global-set-key (kbd "C-x ,") 'org-time-stamp)
 (global-set-key (kbd "C-c c") 'org-capture-string)
 (global-set-key (kbd "C-c x") 'org-capture)
+(global-set-key (kbd "C-c 2") 'org-sparse-tree)
 (global-set-key "\C-cb" 'org-iswitchb)
 
 ;; iimage mode

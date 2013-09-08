@@ -7,7 +7,7 @@
  '(ac-modes (quote (emacs-lisp-mode lisp-mode lisp-interaction-mode slime-repl-mode c-mode cc-mode c++-mode go-mode java-mode malabar-mode clojure-mode clojurescript-mode scala-mode scheme-mode ocaml-mode tuareg-mode coq-mode haskell-mode agda-mode agda2-mode perl-mode cperl-mode python-mode ruby-mode lua-mode ecmascript-mode javascript-mode js-mode js2-mode php-mode css-mode makefile-mode sh-mode fortran-mode f90-mode ada-mode xml-mode sgml-mode ts-mode sclang-mode erlang-mode)))
  '(ansi-color-names-vector ["#242424" "#e5786d" "#95e454" "#cae682" "#8ac6f2" "#333366" "#ccaa8f" "#f6f3e8"])
  '(blink-cursor-mode nil)
- '(c-mode-common-hook (quote (my-c-mode-common-hook-func idle-highlight-mode ac-cc-mode-setup (lambda nil (run-hooks (quote prelude-c-mode-common-hook))))))
+ '(c-mode-common-hook (quote ( idle-highlight-mode ac-cc-mode-setup (lambda nil (run-hooks (quote prelude-c-mode-common-hook))))))
  '(cedet-java-jdk-root "/usr/lib/jvm/java-7-openjdk-i386/")
  '(column-number-mode t)
  '(custom-enabled-themes (quote (zenburn)))

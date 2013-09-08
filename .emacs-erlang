@@ -196,8 +196,8 @@
 (require 'php+-mode)
 (php+-mode-setup)
 
-(add-to-list 'load-path (expand-file-name "/home/algking/.emacs.d/plugin/php-eldoc"))
- (require 'php-eldoc)
+;(add-to-list 'load-path (expand-file-name "/home/algking/.emacs.d/plugin/php-eldoc"))
+; (require 'php-eldoc)
  ;; (add-hook 'php+-mode-hook
  ;; 	  '(lambda ()
  ;; 	     (set
