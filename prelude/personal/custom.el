@@ -33,9 +33,9 @@
  '(kept-new-versions 5)
  '(org-agenda-diary-file "~/note/diary.org")
  '(org-agenda-files (quote ("~/note/note.org" "~/note/life.org" "~/note/task.org")))
- '(org-capture-templates (quote (("l" "life schedule" entry (file+datetree "/home/algking/4399/note/life.org") "* TODO %^{Description} Added:%T %^g
-  %?") ("n" "笔记" entry (file "/home/algking/4399/note/note.org") "** %^{Note} Added:%T
-   %?           ") ("t" "一般的任务" entry (file+datetree "/home/algking/4399/note/task.org") "* TODO %^{Description} Added:%T %^g
+ '(org-capture-templates (quote (("l" "life schedule" entry (file+datetree "/home/algking/note/life.org") "* TODO %^{Description} Added:%T %^g
+  %?") ("n" "笔记" entry (file "/home/algking/note/note.org") "** %^{Note} Added:%T
+   %?           ") ("t" "一般的任务" entry (file+datetree "/home/algking/note/task.org") "* TODO %^{Description} Added:%T %^g
   %?"))))
  '(org-mobile-directory "/home/algking/4399/note")
  '(org-mobile-encryption-password "ALG*lin*123")
