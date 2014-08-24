@@ -44,18 +44,18 @@
 ;; ;; ;; Load CEDET
 ;; ;; ;; This should be near the top of your init file, so that this can
 ;; ;; ;; really replace the CEDET that ships with Emacs proper.
-;;   (load-file "/home/algking/.emacs.d/plugin/cedet/cedet-devel-load.el")
+(load-file "/Users/algking/.emacs.d/plugin/cedet-bzr/trunk/cedet-devel-load.el")
 
 
-;; ;; ;; ;; Add further minor-modes to be enabled by semantic-mode.
-;; ;; ;; ;; See doc-string of `semantic-default-submodes' for other things
-;; ;; ;; ;; you can use here.
-;; (add-to-list 'semantic-default-submodes 'global-semantic-idle-summary-mode t)
-;; (add-to-list 'semantic-default-submodes 'global-semantic-mru-bookmark-mode t)
-;; (add-to-list 'semantic-default-submodes 'global-semantic-idle-completions-mode t)
+;; ;; ;; Add further minor-modes to be enabled by semantic-mode.
+;; ;; ;; See doc-string of `semantic-default-submodes' for other things
+;; ;; ;; you can use here.
+(add-to-list 'semantic-default-submodes 'global-semantic-idle-summary-mode t)
+(add-to-list 'semantic-default-submodes 'global-semantic-mru-bookmark-mode t)
+(add-to-list 'semantic-default-submodes 'global-semantic-idle-completions-mode t)
 
-;; ;; ;; ;; ;; Enable Semantic
-;; (semantic-mode 1)
+;; ;; ;; ;; Enable Semantic
+(semantic-mode 1)
 ;;==============================================================
 
 (load-file "~/.emacs.d/plugin/dash-functional.el")
@@ -109,7 +109,7 @@
 ;;------------------------------------------------------------------------------
 ;;erlang 配置
 ;;------------------------------------------------------------------------------
-(load-file "~/.emacs.d/.emacs-erlang")
+(load-file "~/.emacs.d/.emacs-erlang.el")
 
 ;; =================================================================
 (defvar mru-tag-stack '()
@@ -159,8 +159,9 @@ and when jumping back, it will be removed.")
                                         ;(local-set-key "\C-cR" 'yc/symref)
                                         ;  (local-set-key "\C-cb" 'semantic-mrub-switch-tags)
                                         ; (local-set-key "\C-c\C-j" 'yc/goto-func-any)
-(global-set-key [(meta \.)]  'yc/goto-func)
-(global-set-key [(meta \,)] 'yc/return-func)
+;; (global-set-key [(meta \.)]  'yc/goto-func)
+;;(global-set-key [(meta \,)] 'yc/return-func)
+(global-set-key [(meta \,)] 'pop-tag-mark)
                                         ;(local-set-key [M-S-f12] 'yc/return-func)
                                         ;  (local-set-key (kbd "C-x SPC") 'yc/store-mru-tag)
 
@@ -209,6 +210,7 @@ and when jumping back, it will be removed.")
 ;; 用M-x执行某个命令的时候，在输入的同时给出可选的命令名提示
 (icomplete-mode 1)
 (define-key minibuffer-local-completion-map (kbd "SPC") 'minibuffer-complete-word)
+
 (global-set-key (kbd "C-c y") 'ido-switch-buffer)
 
 ;;; ==================================================================================
@@ -221,18 +223,18 @@ and when jumping back, it will be removed.")
                                         ;'((height . 30) (width . 100) (menu-bar-lines . 20) (tool-bar-lines . 0)))
 ;;; =================================================================================
 (fset 'yes-or-no-p 'y-or-n-p)
-(defun my-maximized ()
-  (interactive)
-  (x-send-client-message
-   nil 0 nil "_NET_WM_STATE" 32
-   '(2 "_NET_WM_STATE_MAXIMIZED_HORZ" 0))
-  (x-send-client-message
-   nil 0 nil "_NET_WM_STATE" 32
-   '(2 "_NET_WM_STATE_MAXIMIZED_VERT" 0))
-  )
+;; (defun my-maximized ()
+;;   (interactive)
+;;   (x-send-client-message
+;;    nil 0 nil "_NET_WM_STATE" 32
+;;    '(2 "_NET_WM_STATE_MAXIMIZED_HORZ" 0))
+;;   (x-send-client-message
+;;    nil 0 nil "_NET_WM_STATE" 32
+;;    '(2 "_NET_WM_STATE_MAXIMIZED_VERT" 0))
+;;   )
 ;(set-frame-parameter nil 'fullscreen 'fullboth)
                                         ;启动时最大化
-(my-maximized)
+;; (my-maximized)
 (setq inhibit-startup-message t);启动不出现闪屏
 
                                         ;(global-set-key [M-left] 'windmove-left)
@@ -254,9 +256,9 @@ and when jumping back, it will be removed.")
      (set-frame-parameter nil 'alpha '(85 50))))
 (global-set-key (kbd "C-c 1") 'toggle-transparency)
 ;;; ==================================================================================
-(require 'popwin)
-(setq display-buffer-function 'popwin:display-buffer)
-(push '(dired-mode :position top) popwin:special-display-config)
+;; (require 'popwin)
+;; (setq display-buffer-function 'popwin:display-buffer)
+;; (push '(dired-mode :position top) popwin:special-display-config)
 ;;; ======================================================================================
 ;; Smart copy, if no region active, it simply copy the current whole line
 (defadvice kill-line (before check-position activate)
@@ -507,73 +509,73 @@ and when jumping back, it will be removed.")
 
  ;; (add-to-list 'load-path "~/.emacs.d/plugin/company-0.5")
  ;; (autoload 'company-mode "company" nil t)
-  (require 'company)
+  ;; (require 'company)
 
-  (defun check-expansion ()
-    (save-excursion
-      (if (looking-at "\\_>") t
-        (backward-char 1)
-        (if (looking-at "\\.") t
-          (backward-char 1)
-          (if (looking-at "->") t nil)))))
+;;   (defun check-expansion ()
+;;     (save-excursion
+;;       (if (looking-at "\\_>") t
+;;         (backward-char 1)
+;;         (if (looking-at "\\.") t
+;;           (backward-char 1)
+;;           (if (looking-at "->") t nil)))))
 
-  (defun do-yas-expand ()
-    (let ((yas/fallback-behavior 'return-nil))
-      (yas/expand)))
+;;   (defun do-yas-expand ()
+;;     (let ((yas/fallback-behavior 'return-nil))
+;;       (yas/expand)))
 
-  (defun tab-indent-or-complete ()
-    (interactive)
-    (if (minibufferp)
-        (minibuffer-complete)
-      (if (or (not yas/minor-mode)
-              (null (do-yas-expand)))
-          (if (check-expansion)
-              (company-complete-common)
-            (indent-for-tab-command)))))
+;;   (defun tab-indent-or-complete ()
+;;     (interactive)
+;;     (if (minibufferp)
+;;         (minibuffer-complete)
+;;       (if (or (not yas/minor-mode)
+;;               (null (do-yas-expand)))
+;;           (if (check-expansion)
+;;               (company-complete-common)
+;;             (indent-for-tab-command)))))
 
-(dolist (hook (list
-                 'erlang-mode-hook
-                 'emacs-lisp-mode-hook
-                 'lisp-mode-hook
-                 'lisp-interaction-mode-hook
-                 'scheme-mode-hook
-                 'c-mode-common-hook
-                 'c++-mode-hook
-                 'java-mode-hook
-                 'javascript-mode-hook
-                 'js2-mode-hook
-                 'php-mode-hook
-                 'python-mode-hook
-                 'haskell-mode-hook
-                 'asm-mode-hook
-                 'emms-tag-editor-mode-hook
-                 'sh-mode-hook))
-    (add-hook hook 'company-mode)
-    )
+;; (dolist (hook (list
+;;                  'erlang-mode-hook
+;;                  'emacs-lisp-mode-hook
+;;                  'lisp-mode-hook
+;;                  'lisp-interaction-mode-hook
+;;                  'scheme-mode-hook
+;;                  'c-mode-common-hook
+;;                  'c++-mode-hook
+;;                  'java-mode-hook
+;;                  'javascript-mode-hook
+;;                  'js2-mode-hook
+;;                  'php-mode-hook
+;;                  'python-mode-hook
+;;                  'haskell-mode-hook
+;;                  'asm-mode-hook
+;;                  'emms-tag-editor-mode-hook
+;;                  'sh-mode-hook))
+;;     (add-hook hook 'company-mode)
+;;     )
 
- (add-hook 'company-mode
-           (lambda ()
-             (local-set-key (kbd "\t") 'company-complete-common)
-             )
-           )
-(add-hook 'erlang-mode-hook 'company-mode)
-(add-hook 'erlang-mode-hook
-          (lambda ()
-            (local-set-key (kbd "\t") 'company-complete-common)
-            )
-          )
-(global-set-key (kbd "M-1") 'company-complete-common)
-(global-set-key "\t" 'tab-indent-or-complete)
-(setq company-begin-commands '(self-insert-command))
+;;  (add-hook 'company-mode
+;;            (lambda ()
+;;              (local-set-key (kbd "\t") 'company-complete-common)
+;;              )
+;;            )
+;; (add-hook 'erlang-mode-hook 'company-mode)
+;; (add-hook 'erlang-mode-hook
+;;           (lambda ()
+;;             (local-set-key (kbd "\t") 'company-complete-common)
+;;             )
+;;           )
+;; (global-set-key (kbd "M-1") 'company-complete-common)
+;; (global-set-key "\t" 'tab-indent-or-complete)
+;; (setq company-begin-commands '(self-insert-command))
 
 
-                                        ;(setq company-idle-delay nil)
-(add-hook 'c++-mode-hook '(lambda () (company-mode)))
-                                        ;(global-set-key [] 'company-complete-common)
-(global-set-key (kbd "M-[") 'company-complete-common)
-(global-set-key (kbd "M-1") 'company-manual-begin)
-(global-set-key (kbd "M-?") 'company-complete)
-(global-set-key (kbd "M-1") 'company-select-next)
+;;                                         ;(setq company-idle-delay nil)
+;; (add-hook 'c++-mode-hook '(lambda () (company-mode)))
+;;                                         ;(global-set-key [] 'company-complete-common)
+;; (global-set-key (kbd "M-[") 'company-complete-common)
+;; (global-set-key (kbd "M-1") 'company-manual-begin)
+;; (global-set-key (kbd "M-?") 'company-complete)
+;; (global-set-key (kbd "M-1") 'company-select-next)
 
 
 
@@ -663,6 +665,7 @@ and when jumping back, it will be removed.")
 
 
 (global-set-key [f4] 'compile)
+(global-set-key (kbd "C-c 3") 'toggle-viper-mode)
 
 
 ;; (defvar flymake-mode-map (make-sparse-keymap))
@@ -799,7 +802,7 @@ and when jumping back, it will be removed.")
  ;
   ;; (add-hook 'after-init-hook
   ;;         'session-initialize)
-
+(set-default-font "Monaco 13")
 (setq current-language-environment "UTF-8")
 (setq locale-coding-system 'utf-8)
 (set-terminal-coding-system 'utf-8)
@@ -815,24 +818,24 @@ and when jumping back, it will be removed.")
 (prefer-coding-system 'utf-8)
 
 ;;; idle-highlight-mode 设置
-(dolist (hook (list
-               'erlang-mode-hook
-               'emacs-lisp-mode-hook
-               'lisp-mode-hook
-               'lisp-interaction-mode-hook
-               'scheme-mode-hook
-               'c-mode-common-hook
-               'c++-mode-hook
-               'java-mode-hook
-               'javascript-mode-hook
-               'php-mode-hook
-               'python-mode-hook
-               'haskell-mode-hook
-               'asm-mode-hook
-               'emms-tag-editor-mode-hook
-               'sh-mode-hook))
-  (add-hook hook 'idle-highlight-mode)
-  )
+;; (dolist (hook (list
+;;                'erlang-mode-hook
+;;                'emacs-lisp-mode-hook
+;;                'lisp-mode-hook
+;;                'lisp-interaction-mode-hook
+;;                'scheme-mode-hook
+;;                'c-mode-common-hook
+;;                'c++-mode-hook
+;;                'java-mode-hook
+;;                'javascript-mode-hook
+;;                'php-mode-hook
+;;                'python-mode-hook
+;;                'haskell-mode-hook
+;;                'asm-mode-hook
+;;                'emms-tag-editor-mode-hook
+;;                'sh-mode-hook))
+;;   (add-hook hook 'idle-highlight-)
+;;   )
 
  ;; (load " ~/.emacs.d/plugin/moz/moz.el")
 ;; (autoload 'moz-minor-mode "moz" "Mozilla Minor and Inferior Mozilla Modes" t)
@@ -843,7 +846,7 @@ and when jumping back, it will be removed.")
 
 ;;; =============imenu=================
 (global-set-key  (kbd "C-c i") 'helm-semantic-or-imenu)
-
+(global-set-key (kbd "C-u") 'scroll-down-command)
 ;; (require 'eide)
 ;; (eide-start)
 
@@ -864,18 +867,27 @@ and when jumping back, it will be removed.")
 (set-locale-environment "UTF-8")
 
 ;;这句指定默认英文字体为Dejavu Sans Mono，大小10
-(set-default-font "Dejavu Sans Mono 10")
+;; (set-default-font "Dejavu Sans Mono 10")
 
 ;;前面一串“(if...lambda...(with-select-frame frame ())...)"是个很好的函数框架，意思是frame创建后载入，用这个框架可以解决--daemon启动的问题
 ;;只有set-fontset-font一句指定修改字符集'unicode的字体为文泉驿等宽微米黑，大小为12
-(if (and (fboundp 'daemonp) (daemonp))
-    (add-hook 'after-make-frame-functions
-              (lambda (frame)
-                (with-selected-frame frame
-                  (set-fontset-font "fontset-default"
-                    'unicode "WenQuanyi Micro Hei Mono 12"))))
-  (set-fontset-font "fontset-default" 'unicode "WenQuanYi Micro Hei Mono 12"))
+;; (if (and (fboundp 'daemonp) (daemonp))
+;;     (add-hook 'after-make-frame-functions
+;;               (lambda (frame)
+;;                 (with-selected-frame frame
+;;                   (set-fontset-font "fontset-default"
+;;                     'unicode "WenQuanyi Micro Hei Mono 12"))))
+;;   (set-fontset-font "fontset-default" 'unicode "WenQuanYi Micro Hei Mono 12"))
 
+(eval-when-compile (require 'cl))
+
+(defun set-font (english chinese english-size chinese-size)
+  (set-face-attribute 'default nil :font
+                           (format "%s:pixelsize=%d" english english-size))
+  (dolist (charset '(kana han symbol cjk-misc bopomofo))
+     (set-fontset-font (frame-parameter nil 'font) charset
+                           (font-spec :family chinese :size chinese-size))))
+ (set-font "Monaco" "YaHei Consolas Hybrid" 14 16)
 
 (add-hook 'org-babel-after-execute-hook 'bh/display-inline-images 'append)
 
@@ -972,10 +984,10 @@ and when jumping back, it will be removed.")
    php-mode
    plantuml-mode
    popup
-   popwin
+   ;; popwin
    psvn
    session
-   shell-pop
+   ;; shell-pop
    skewer-mode
    skewer-mode
    slime
@@ -1009,3 +1021,28 @@ and when jumping back, it will be removed.")
                                         ; `completion-ignored-extensions', etc.
 (require 'yasnippet)
 (yas-global-mode 1)
+
+;; (set-default-font "Monaco 14")
+;; (set-default-font "Andale Mono 14")
+;; (set-default-font "YaHei Consolas Hybrid 14")
+
+;; (set-fontset-font
+;;   (frame-parameter nil 'font)
+;;   'han
+;;   (font-spec :family "Hiragino Sans GB W3 12" ))
+ 
+ ;; (font-spec :family "Hiragino Sans GB W3" ))
+(setq org-image-actual-width nil)
+(setq org-image-actual-width 10)
+;; => always resize inline images to 300 pixels
+
+(setq org-image-actual-width '(400))
+;; => if there is a #+ATTR.*: width="200", resize to 200,
+;; otherwise resize to 400
+
+
+
+;; (add-to-list 'load-path "/path/to/php+-mode/")
+  ;; (require 'php+-mode)
+(require 'php-tags)
+ ;; (php+-mode-setup)
