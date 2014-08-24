@@ -1,3 +1,6 @@
+[![License GPL 3][badge-license]](http://www.gnu.org/licenses/gpl-3.0.txt)
+[![Gittip](http://img.shields.io/gittip/bbatsov.svg)](https://www.gittip.com/bbatsov/)
+
 Emacs Prelude
 =============
 
@@ -11,6 +14,50 @@ Emacs power users.
 Prelude is compatible **ONLY with GNU Emacs 24.x**. In general you're
 advised to always run Prelude with the latest Emacs - currently
 **24.3**.
+
+**Table of Contents**
+
+- [Fast Forward](#fast-forward)
+- [Installing Emacs 24](#installing-emacs-24)
+- [Installation](#installation)
+	- [Automated](#automated)
+		- [Via Curl](#via-curl)
+		- [Via Wget](#via-wget)
+	- [Manual](#manual)
+- [Updating Prelude](#updating-prelude)
+	- [Manual update](#manual-update)
+		- [Update all bundled packages](#update-all-bundled-packages)
+		- [Update Prelude's code](#update-preludes-code)
+		- [Restart Prelude](#restart-prelude)
+	- [Automatic update](#automatic-update)
+- [Enabling additional modules](#enabling-additional-modules)
+- [Running](#running)
+- [Getting to know Prelude](#getting-to-know-prelude)
+	- [Keymap](#keymap)
+		- [Global](#global)
+		- [Prelude Mode](#prelude-mode)
+		- [OSX modifier keys](#osx-modifier-keys)
+		- [Projectile](#projectile)
+		- [Key-chords](#key-chords)
+			- [Disabling key-chords](#disabling-key-chords)
+- [Automatic package installation](#automatic-package-installation)
+	- [Color Themes](#color-themes)
+	- [Personalizing](#personalizing)
+		- [Disabling whitespace-mode](#disabling-whitespace-mode)
+		- [Disable flyspell-mode](#disable-flyspell-mode)
+- [Caveats & Pitfalls](#caveats--pitfalls)
+	- [Updating bundled packages](#updating-bundled-packages)
+	- [Problems with flyspell-mode](#problems-with-flyspell-mode)
+	- [Ugly colors in the terminal Emacs version](#ugly-colors-in-the-terminal-emacs-version)
+	- [MELPA error on initial startup](#melpa-error-on-initial-startup)
+	- [No arrow navigation in editor buffers](#no-arrow-navigation-in-editor-buffers)
+	- [Customized C-a behavior](#customized-c-a-behavior)
+	- [Poor ido matching performance on large datasets](#poor-ido-matching-performance-on-large-datasets)
+	- [Windows compatibility](#windows-compatibility)
+- [Known issues](#known-issues)
+- [Support](#support)
+- [Contributors](#contributors)
+- [Bugs & Improvements](#bugs--improvements)
 
 ## Fast Forward
 
@@ -51,7 +98,7 @@ By default most of the modules that ship with Prelude are not loaded.
 ## Installing Emacs 24
 
 Obviously to use the Emacs Prelude you have to install Emacs 24
-first. Have a look at the [WikEmacs articles on installing Emacs](http://wikemacs.org/wiki/Installing_Emacs).
+first. Have a look at the [WikEmacs articles on installing Emacs](http://wikemacs.org/index.php/Installing_Emacs).
 
 ## Installation
 
@@ -84,13 +131,19 @@ ln -s path/to/local/repo ~/.emacs.d
 cd ~/.emacs.d
 ```
 
-You'd do well to replace `~/.emacs.d` with the value of
-`user-emacs-directory` for your OS. You can check the value by doing
-`C-h v user-emacs-directory` inside Emacs.
+If you are using Windows, you should check what Emacs thinks the `~` directory is by running Emacs and typing `C-x d ~/<RET>`, and then adjust the command appropriately.
 
 ## Updating Prelude
 
-The update procedure is fairly straightforward:
+### Manual update
+
+The update procedure is fairly straightforward and consists of 3 steps:
+
+#### Update all bundled packages
+
+Just run <kbd>M-x package-list-packages RET U x</kbd>.
+
+#### Update Prelude's code
 
 ```bash
 cd path/to/prelude/installation
@@ -100,15 +153,19 @@ git pull
 The `path/to/prelude/installation` is usually `~/.emacs.d` (at least
 on Unix systems).
 
-Alternatively you can run <kbd>M-x prelude-update</kbd> from Emacs itself.
+#### Restart Prelude
 
-It's generally a good idea to stop Emacs before you do the update. The
+It's generally a good idea to stop Emacs after you do the update. The
 next time Prelude starts it will install any new dependencies (if
 there are such).
 
+### Automatic update
+
+Simply run <kbd>M-x prelude-update</kbd> from Emacs itself and restart Emacs afterwards.
+
 ## Enabling additional modules
 
-By default most of the modules that ship with Prelude are not loaded.
+By default most of the modules that ship with Prelude are not loaded. For more information on the functionality provided by these modules visit the [docs](modules/doc/README.md).
 
 ```lisp
 ;;; Uncomment the modules you'd like to use and restart Prelude afterwards
@@ -125,7 +182,6 @@ By default most of the modules that ship with Prelude are not loaded.
 (require 'prelude-js)
 ;; (require 'prelude-latex)
 (require 'prelude-lisp)
-;; (require 'prelude-markdown)
 ;; (require 'prelude-mediawiki)
 (require 'prelude-org)
 (require 'prelude-perl)
@@ -168,10 +224,10 @@ You'd probably do well to put a few aliases in your `.zshrc` (or
 `.bashrc`):
 
 ```bash
-alias e=emacsclient -t
-alias ec=emacsclient -c
-alias vim=emacsclient -t
-alias vi=emacsclient -t
+alias e='emacsclient -t'
+alias ec='emacsclient -c'
+alias vim='emacsclient -t'
+alias vi='emacsclient -t'
 ```
 
 The last two aliases are helpful if you're used to editing files from
@@ -193,7 +249,6 @@ extensions to keybindings.
 
 Keybinding         | Description
 -------------------|------------------------------------------------------------
-<kbd>C-M-h</kbd>   | Kill the previous word(`backward-kill-word`). (as in Bash/Zsh)
 <kbd>C-x \\</kbd>   | `align-regexp`
 <kbd>C-+</kbd>     | Increase font size(`text-scale-increase`).
 <kbd>C--</kbd>     | Decrease font size(`text-scale-decrease`).
@@ -204,6 +259,7 @@ Keybinding         | Description
 <kbd>C-x M-m</kbd> | Start your default shell.
 <kbd>C-x C-m</kbd> | Alias for `M-x`.
 <kbd>C-h A</kbd>   | Run `apropos` (search in all Emacs symbols).
+<kbd>C-h C-m</kbd> | Display key bindings of current major mode and descriptions of every binding.
 <kbd>M-/</kbd>     | Run `hippie-expand` (a replacement for the default `dabbrev-expand`).
 <kbd>C-x C-b</kbd> | Open `ibuffer` (a replacement for the default `buffer-list`).
 <kbd>F11</kbd>     | Make the window full screen.
@@ -217,31 +273,66 @@ Keybinding         | Description
 Keybinding         | Description
 -------------------|------------------------------------------------------------
 <kbd>C-c o</kbd>   | Open the currently visited file with an external program.
+<kbd>C-c i</kbd>   | Search for a symbol, only for buffers that contain code
 <kbd>C-c g</kbd>   | Search in Google for the thing under point (or an interactive query).
-<kbd>C-S-RET</kbd> or <kbd>M-o</kbd> | Insert an empty line above the current line and indent it properly
-<kbd>S-RET</kbd> or <kbd>M-O</kbd> | Insert an empty line and indent it properly (as in most IDEs).
-<kbd>C-S-up</kbd>  | Move the current line up.
-<kbd>C-S-down</kbd> | Move the current line down.
+<kbd>C-c G</kbd>   | Search in GitHub for the thing under point (or an interactive query).
+<kbd>C-c y</kbd>   | Search in YouTube for the thing under point (or an interactive query).
+<kbd>C-c U</kbd>   | Search in Duckduckgo for the thing under point (or an interactive query).
+<kbd>C-S-RET</kbd> or <kbd>Super-o</kbd> | Insert an empty line above the current line and indent it properly.
+<kbd>S-RET</kbd> or <kbd>M-o</kbd> | Insert an empty line and indent it properly (as in most IDEs).
+<kbd>C-S-up</kbd> or <kbd>M-S-up</kbd> | Move the current line or region up.
+<kbd>C-S-down</kbd> or <kbd>M-S-down</kbd>| Move the current line or region down.
 <kbd>C-c n</kbd> | Fix indentation in buffer and strip whitespace.
 <kbd>C-c f</kbd> | Open recently visited file.
 <kbd>C-M-\\</kbd> | Indent region (if selected) or the entire buffer.
-<kbd>C-c u</kbd> | Open URL in your default browser.
+<kbd>C-c u</kbd> | Open a new buffer containing the contents of URL.
 <kbd>C-c e</kbd> | Eval a bit of Emacs Lisp code and replace it with its result.
 <kbd>C-c s</kbd> | Swap two active windows.
+<kbd>C-c D</kbd> | Delete current file and buffer.
 <kbd>C-c d</kbd> | Duplicate the current line (or region).
 <kbd>C-c M-d</kbd> | Duplicate and comment the current line (or region).
-<kbd>C-c r</kbd> | Rename the currently visited file and buffer.
+<kbd>C-c r</kbd> | Rename the current buffer and its visiting file if any.
 <kbd>C-c t</kbd> | Open a terminal emulator (`ansi-term`).
 <kbd>C-c k</kbd> | Kill all open buffers except the one you're currently in.
-<kbd>C-c h</kbd> | Open Helm (a useful means of navigating your buffers and project files).
-<kbd>C-c +</kbd> | Increment integer at point.
-<kbd>C-c -</kbd> | Decrement integer at point.
+<kbd>C-c TAB</kbd> | Indent and copy region to clipboard
+<kbd>C-c h</kbd> | Open Helm (available if you've enabled the `prelude-helm` module).
+<kbd>C-c I</kbd> | Open user's init file.
+<kbd>C-c S</kbd> | Open shell's init file.
+<kbd>C-c . +</kbd> | Increment integer at point. Default is +1.
+<kbd>C-c . -</kbd> | Decrement integer at point. Default is -1.
+<kbd>C-c . *</kbd> | Multiply integer at point. Default is *2.
+<kbd>C-c . /</kbd> | Divide integer at point. Default is /2.
+<kbd>C-c . \\</kbd> | Modulo integer at point. Default is modulo 2.
+<kbd>C-c . ^</kbd> | Power to the integer at point. Default is ^2.
+<kbd>C-c . <</kbd> | Left-shift integer at point. Default is 1 position to the left.
+<kbd>C-c . ></kbd> | Right-shift integer at point. Default is 1 position to the right.
+<kbd>C-c . #</kbd> | Convert integer at point to specified base. Default is 10.
+<kbd>C-c . %</kbd> | Replace integer at point with another specified integer.
+<kbd>C-c . '</kbd> | Perform arithmetic operations on integer at point. User specifies the operator.
+<kbd>Super-g</kbd> | Toggle between God mode and non-God mode
 <kbd>Super-r</kbd> | Recent files
-<kbd>Super-x</kbd> | Expand region
 <kbd>Super-j</kbd> | Join lines
 <kbd>Super-k</kbd> | Kill whole line
-<kbd>Super-m</kbd> | Magit status
-<kbd>Super-o</kbd> | Open line above current line
+<kbd>Super-m m</kbd> | Magit status
+<kbd>Super-m l</kbd> | Magit log
+<kbd>Super-m f</kbd> | Magit file log
+<kbd>Super-m b</kbd> | Magit blame mode
+
+**Note**: For various arithmetic operations, the prefix `C-c .` only needs to be pressed once for the first operation.
+For subsequent operations, only the appropriate operations (i.e. `+`, `-`, `*`, `/`... needs to be pressed).
+
+#### OSX modifier keys
+
+Prelude does not mess by default with the standard mapping of `Command` (to `Super`) and `Option` (to `Meta`).
+
+If you want to swap them add this to your personal config:
+
+```lisp
+(setq mac-command-modifier 'meta)
+(setq mac-option-modifier 'super)
+```
+
+You can also temporarily swap them with `C-c w` (`M-x prelude-swap-meta-and-super`).
 
 #### Projectile
 
@@ -267,20 +358,16 @@ Keybinding         | Description
 <kbd>C-c p z</kbd> | Adds the currently visited to the cache.
 <kbd>C-c p s</kbd> | Display a list of known projects you can switch to.
 
-Prelude adds some extra keybindings:
-
-Keybinding         | Command
--------------------|------------------------------------------------------------
-<kbd>Super-f</kbd> | Find file in project
-<kbd>Super-d</kbd> | Find directory in project
-<kbd>Super-g</kbd> | Run grep on project
-<kbd>Super-p</kbd> | Switch projects
+Prelude adds an extra keymap prefix `S-p` (`S` stands for
+`Super`), so you can use `S-p` instead of `C-c p`.
 
 If you ever forget any of Projectile's keybindings just do a:
 
 <kbd>C-c p C-h</kbd>
 
 #### Key-chords
+
+**Key-chords are available only when the `prelude-key-chord` module has been enabled.**
 
 Keybinding         | Description
 -------------------|----------------------------------------------
@@ -289,6 +376,8 @@ Keybinding         | Description
 <kbd>jl</kbd>      | Jump to the beginning of a line(`ace-jump-line-mode`)
 <kbd>JJ</kbd>      | Jump back to previous buffer(`prelude-switch-to-previous-buffer`)
 <kbd>uu</kbd>      | View edits as a tree(`undo-tree-visualize`)
+<kbd>xx</kbd>      | Executed extended command(`execute-extended-command`)
+<kbd>yy</kbd>      | Browse the kill ring(`browse-kill-ring`)
 
 ##### Disabling key-chords
 
@@ -307,12 +396,17 @@ If you're an `evil-mode` user you'll probably do well to disable `key-chord-mode
 (key-chord-mode -1)
 ```
 
+#### vim emulation
+
+If you want to use vim inside of emacs enable the `prelude-evil` module which provides
+support for `evil-mode`.
+
 ## Automatic package installation
 
 The default Prelude installation comes with a bare minimum of
 functionality. It will however install add-ons for various programming
 languages and frameworks on demand. For instance - if you try to open
-a `.clj` file `clojure-mode`, `nrepl.el` and prelude's enhanced Lisp
+a `.clj` file `clojure-mode`, `cider` and Prelude's enhanced Lisp
 configuration will be installed automatically for you.
 
 You can, of course, install anything you wish manually as well.
@@ -366,6 +460,12 @@ If you require just a single package you can also use:
 (prelude-require-package 'some-package)
 ```
 
+#### Preloading personal config
+
+Sometimes you might want to load code before Prelude has started loading. Prelude will automatically preload all
+Emacs Lisp files in your `personal/preload` directory. Note that at this point you can't using anything from
+Prelude, except a few variables like `prelude-dir`, etc (since nothing is yet loaded).
+
 #### Disabling whitespace-mode
 
 Although `whitespace-mode` is awesome some people might find it too
@@ -398,6 +498,20 @@ If you're not fond of spellchecking on the fly:
 ```
 
 ## Caveats & Pitfalls
+
+### Updating bundled packages
+
+Generally it's a good idea to do a package update before running
+updating Prelude, since the latest Prelude code might depend on newer
+versions of the bundled packages than you would currently have
+installed.
+
+If you're doing manual Prelude updates you should always do a package update first.
+
+`M-x package-list-packages RET U x`
+
+That's not necessary if you're using `M-x prelude-update`, since it
+will automatically update the installed packages.
 
 ### Problems with flyspell-mode
 
@@ -435,13 +549,18 @@ afterwards.
 This is not a bug - it's a feature! I firmly believe that the one true
 way to use Emacs is by using it the way it was intended to be used (as
 far as navigation is concerned at least). That's why I've disabled all
-movement commands with arrows (and keys like page up, page down, etc) - to prevent you from being tempted to
-use them.
+movement commands with arrows (and keys like page up, page down,
+etc) - to prevent you from being tempted to use them.
 
-If you'd still like to use the arrow keys just invoke `M-x
-guru-mode` to enable them for the duration of your
-current Emacs session or add the following snippet to your
-personal Emacs customization to enable them permanently:
+If you'd like to be able to use the arrow keys (but still be reminded of
+the alternatives) put this in your personal config:
+
+```lisp
+(setq guru-warn-only t)
+```
+
+To disable `guru-mode` completely add the following snippet to your
+personal Emacs config:
 
 ```lisp
 (setq prelude-guru nil)
@@ -484,15 +603,6 @@ While everything in Prelude should work fine in Windows, I test it only
 with Linux & OSX, so there are Windows related problems from time to
 time. This situation will probably improve over time.
 
-## Share the knowledge
-
-[WikEmacs](http://wikemacs.org) collects useful resources for working
-with GNU Emacs. Please, take the time to peruse and improve them as
-you accumulate knowledge about Emacs. Prelude makes this especially
-easy, since it bundles
-[MediaWiki support](http://wikemacs.org/wiki/Mediawiki.el) + the
-settings required to access WikEmacs right away.
-
 ## Known issues
 
 Check out the project's
@@ -504,6 +614,8 @@ and send me a pull request. :-)
 
 Support is available via the Prelude Google Group <emacs-prelude@googlegroups.com>.
 
+There's also a Freenode channel you can visit - `#prelude-emacs`.
+
 ## Contributors
 
 Here's a [list](https://github.com/bbatsov/prelude/contributors) of all the people who have contributed to the
@@ -514,5 +626,11 @@ development of Emacs Prelude.
 Bug reports and suggestions for improvements are always
 welcome. GitHub pull requests are even better! :-)
 
+I'm also accepting financial contributions via [gittip](https://www.gittip.com/bbatsov).
+
+[![Support via Gittip](https://rawgithub.com/twolfson/gittip-badge/0.2.0/dist/gittip.png)](https://www.gittip.com/bbatsov)
+
 Cheers,<br/>
 [Bozhidar](https://twitter.com/bbatsov)
+
+[badge-license]: https://img.shields.io/badge/license-GPL_3-green.svg

@@ -102,7 +102,7 @@
 (add-to-list 'el-get-recipe-path "~/.emacs.d/el-get/el-get/recipes")
 ;; (el-get 'sync)
 ;--------------------------------------
-(load-file "~/.emacs.d/prelude/init.el")
+(load-file "~/.emacs.d/prelude-back/init.el")
 (setq global-hl-line-sticky-flag nil)
 (global-hl-line-mode 0)
 (setq stack-trace-on-error t)

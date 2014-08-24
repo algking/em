@@ -38,3 +38,6 @@
 	path = plugin/weibo.emacs
 	url = https://github.com/austin-----/weibo.emacs.git
     
+[submodule "prelude-back"]
+	path = prelude-back
+	url = https://github.com/bbatsov/prelude.git

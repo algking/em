@@ -41,7 +41,7 @@
 
 (menu-bar-mode -1)
 
-;; the Blinking cursor is nothing, but an annoyance
+;; the blinking cursor is nothing, but an annoyance
 (blink-cursor-mode -1)
 
 ;; disable startup screen

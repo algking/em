@@ -32,7 +32,7 @@
 
 ;;; Code:
 
-(prelude-ensure-module-deps '(guru-mode))
+(prelude-require-packages '(guru-mode))
 
 (defun prelude-ido-goto-symbol (&optional symbol-list)
   "Refresh imenu and jump to a place in the buffer using Ido."
@@ -95,7 +95,7 @@
 
 This functions should be added to the hooks of major modes for programming."
   (font-lock-add-keywords
-   nil '(("\\<\\(FIX\\(ME\\)?\\|TODO\\|OPTIMIZE\\|HACK\\|REFACTOR\\):"
+   nil '(("\\<\\(\\(FIX\\(ME\\)?\\|TODO\\|OPTIMIZE\\|HACK\\|REFACTOR\\):\\)"
           1 font-lock-warning-face t))))
 
 ;; show the name of the current function definition in the modeline
@@ -113,6 +113,11 @@ This functions should be added to the hooks of major modes for programming."
 ;;
 ;; (the final optional t sets the *append* argument)
 
+;; smart curly braces
+(sp-pair "{" nil :post-handlers
+         '(((lambda (&rest _ignored)
+              (prelude-smart-open-line-above)) "RET")))
+
 (defun prelude-prog-mode-defaults ()
   "Default coding hook, useful with any programming language."
   (when (and (executable-find ispell-program-name)
@@ -120,6 +125,7 @@ This functions should be added to the hooks of major modes for programming."
     (flyspell-prog-mode))
   (when prelude-guru
     (guru-mode +1))
+  (smartparens-mode +1)
   (prelude-enable-whitespace)
   (prelude-local-comment-auto-fill)
   (prelude-font-lock-comment-annotations))
@@ -129,6 +135,7 @@ This functions should be added to the hooks of major modes for programming."
 (add-hook 'prog-mode-hook (lambda ()
                             (run-hooks 'prelude-prog-mode-hook)))
 
+;; enable on-the-fly syntax checking
 (if (fboundp 'global-flycheck-mode)
     (global-flycheck-mode +1)
   (add-hook 'prog-mode-hook 'flycheck-mode))
