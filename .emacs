@@ -44,7 +44,7 @@
 ;; ;; ;; Load CEDET
 ;; ;; ;; This should be near the top of your init file, so that this can
 ;; ;; ;; really replace the CEDET that ships with Emacs proper.
-(load-file "/Users/algking/.emacs.d/plugin/cedet-bzr/trunk/cedet-devel-load.el")
+;; (load-file "/Users/algking/.emacs.d/plugin/cedet-bzr/trunk/cedet-devel-load.el")
 
 
 ;; ;; ;; Add further minor-modes to be enabled by semantic-mode.
@@ -159,8 +159,8 @@ and when jumping back, it will be removed.")
                                         ;(local-set-key "\C-cR" 'yc/symref)
                                         ;  (local-set-key "\C-cb" 'semantic-mrub-switch-tags)
                                         ; (local-set-key "\C-c\C-j" 'yc/goto-func-any)
-;; (global-set-key [(meta \.)]  'yc/goto-func)
-;;(global-set-key [(meta \,)] 'yc/return-func)
+(global-set-key [(super \.)]  'yc/goto-func)
+(global-set-key [(super \,)] 'yc/return-func)
 (global-set-key [(meta \,)] 'pop-tag-mark)
                                         ;(local-set-key [M-S-f12] 'yc/return-func)
                                         ;  (local-set-key (kbd "C-x SPC") 'yc/store-mru-tag)
@@ -587,7 +587,7 @@ and when jumping back, it will be removed.")
 ;;  "~/.emacs.d/prelude/elpa/auto-complete-20130122.1551/dict")
 (require 'auto-complete-config)
 (ac-config-default)
-
+(define-key ac-mode-map (kbd "M-1") 'auto-complete)
 ;;=====================================================================
 ;;el-get 的 auto-complete-etags
 ;;有问题,从github中下来的才行
@@ -612,18 +612,19 @@ and when jumping back, it will be removed.")
 (global-set-key  (kbd "M-4") 'multi-shell-next)
 (global-set-key [f7] 'multi-shell-new)
 ;;; =================================shell complete=============================
-;; (add-to-list 'ac-modes 'erlang-shell-mode)
-(load-file "~/.emacs.d/plugin/readline-complete.el")
+(add-to-list 'ac-modes 'erlang-shell-mode)
+;; (load-file "~/.emacs.d/plugin/readline-complete.el")
 (setq explicit-shell-file-name "bash")
 (setq explicit-bash-args '("-c" "export EMACS=; stty echo; bash"))
 (setq comint-process-echoes t)
 
-(defun my-shell-complete ()
-  (interactive)
-  (setq ac-auto-start nil)
-  (ac-set-trigger-key "TAB")
-  )
-(add-hook 'shell-mode-hook 'my-shell-complete)
+;; (defun my-shell-complete ()
+;;   (interactive)
+;;   (setq ac-auto-start nil)
+;;   (ac-set-trigger-key "TAB")
+;;   )
+;; (add-hook 'shell-mode-hook 'my-shell-complete)
+
 (require 'readline-complete)
 (add-to-list 'ac-modes 'shell-mode)
 (add-hook 'shell-mode-hook 'ac-rlc-setup-sources)
@@ -755,42 +756,42 @@ and when jumping back, it will be removed.")
 ;;; =================================================================
 ;;; popup配置
 ;;; =================================================================
-(defcustom complete-in-region-use-popup nil
-  "If non-NIL, complete-in-region will popup a menu with the possible completions."
-  :type 'boolean
-  :group 'completion)
-(autoload 'popup-menu* "popup" "Show a popup menu" nil)
-(defun popup-complete-in-region (next-func start end collection &optional predicate)
-  (if (not complete-in-region-use-popup)
-      (funcall next-func start end collection predicate)
-    (let* ((prefix (buffer-substring start end))
-           (completion (try-completion prefix collection predicate))
-           (choice (and (stringp completion)
-                        (string= completion prefix)
-                        (popup-menu* (all-completions prefix collection predicate))))
-           (replacement (or choice completion))
-           (tail (and (stringp replacement)
-                      (not (string= prefix replacement))
-                      (substring replacement (- end start)))))
-      (cond ((eq completion t)
-             (goto-char end)
-             (message "Sole completion")
-             nil)
-            ((null completion)
-             (message "No match")
-             nil)
-            (tail
-             (goto-char end)
-             (insert tail)
-             t)
-            (choice
-             (message "Nothing to do")
-             nil)
-            (t
-             (message "completion: something failed!")
-             (funcall next-func start end collection predicate))))))
-(add-hook 'completion-in-region-functions 'popup-complete-in-region)
-(provide 'popup-complete)
+;; (defcustom complete-in-region-use-popup nil
+;;   "If non-NIL, complete-in-region will popup a menu with the possible completions."
+;;   :type 'boolean
+;;   :group 'completion)
+;; (autoload 'popup-menu* "popup" "Show a popup menu" nil)
+;; (defun popup-complete-in-region (next-func start end collection &optional predicate)
+;;   (if (not complete-in-region-use-popup)
+;;       (funcall next-func start end collection predicate)
+;;     (let* ((prefix (buffer-substring start end))
+;;            (completion (try-completion prefix collection predicate))
+;;            (choice (and (stringp completion)
+;;                         (string= completion prefix)
+;;                         (popup-menu* (all-completions prefix collection predicate))))
+;;            (replacement (or choice completion))
+;;            (tail (and (stringp replacement)
+;;                       (not (string= prefix replacement))
+;;                       (substring replacement (- end start)))))
+;;       (cond ((eq completion t)
+;;              (goto-char end)
+;;              (message "Sole completion")
+;;              nil)
+;;             ((null completion)
+;;              (message "No match")
+;;              nil)
+;;             (tail
+;;              (goto-char end)
+;;              (insert tail)
+;;              t)
+;;             (choice
+;;              (message "Nothing to do")
+;;              nil)
+;;             (t
+;;              (message "completion: something failed!")
+;;              (funcall next-func start end collection predicate))))))
+;; (add-hook 'completion-in-region-functions 'popup-complete-in-region)
+;; (provide 'popup-complete)
 
 
 ;; (add-to-list 'load-path "~/.emacs.d/plugin/weibo.emacs")
@@ -976,7 +977,7 @@ and when jumping back, it will be removed.")
    js-comint
    logito
    magit
-   melpa
+   ;; melpa
    multiple-cursors
    org
    outline-magic
@@ -1045,4 +1046,11 @@ and when jumping back, it will be removed.")
 ;; (add-to-list 'load-path "/path/to/php+-mode/")
   ;; (require 'php+-mode)
 (require 'php-tags)
+
+(add-hook 'php-mode-hook 'eldoc-mode)
+(add-hook 'php-mode-hook 'ggtags-mode)
  ;; (php+-mode-setup)
+
+(global-set-key "\C-ce" 'dash-at-point)
+;; ace-jump
+;; (setq ace-jump-mode-submode-list `(ace-jump-))
