@@ -46,6 +46,15 @@
          (imenu-add-to-menubar "imenu")))
 
 
+;; ================================company-distel===============
+;; =============================================================
+(add-to-list 'load-path "~/.emacs.d/el-get/company-distel")
+(require 'auto-complete-distel)
+(setq ac-sources '(distel-completions))
+;; (require 'company-distel)
+;; (add-to-list 'company-backends 'company-distel)
+;; (require 'company-distel-frontend)
+
 (add-hook 'erlang-mode-hook 'flymake-mode-on)
 (add-hook 'erlang-mode-hook 'viper-mode)
 (add-hook 'erlang-mode-hook 'turn-on-orgtbl)
@@ -145,12 +154,6 @@
   (setq buffer-display-table (make-display-table))
   (aset buffer-display-table ?\^M []))
 
-(require 'package)
-(add-to-list 'package-archives
-             '("marmalade". "http://marmalade-repo.org/packages/") t)
-
-(package-initialize)
-
 ;;; =========================== haskell mode ========================
 ;; (custom-set-variables
 ;;  '(haskell-mode-hook '(turn-on-haskell-indent)))
@@ -169,13 +172,6 @@
 ;; Intelligent semi-automatic indentation. How to enable:
 
 (add-hook 'inferior-haskell-mode-hook 'turn-on-ghci-completion)
-
-;;; ==============javascript mode 设置 ===============
-(add-hook 'javascript-mode-hook (lambda ()
-                                 (js2-mode)
-                                 ))
-
-(setq ac-js2-evaluate-calls t)
 
 ;;; =====================php ==================
 
