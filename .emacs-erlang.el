@@ -161,9 +161,9 @@
 (autoload 'ghc-init "ghc" nil t)
 (add-hook 'haskell-mode-hook (lambda () (ghc-init)
                                (flymake-mode)
-                               (ghc-core-mode)
+                               (ghc-mode)
                                (auto-complete-mode)
-                               (ac-complete-ghc-mod)
+                               ;; (ac-complete-ghc-mod)
                                (haskell-indent-mode)
                                ))
 

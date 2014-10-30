@@ -2,7 +2,6 @@
 ;; mini-buffer buffer complete/switch window switch 启动UI
 ;;==============================================================
 ;;启动页面，粘贴外部可用，工具栏
-(setq inhibit-startup-message t)
 (setq x-select-enable-clipboard t)
 (global-set-key [M-f11] 'tool-bar-mode)
 (tool-bar-mode -1)
@@ -18,7 +17,6 @@
 (add-to-list 'default-frame-alist '(alpha 88 50))
 (global-set-key (kbd "C-c 1") 'toggle-transparency)
 
-(set-default-font "Monaco 13")
 (setq current-language-environment "UTF-8")
 (setq locale-coding-system 'utf-8)
 (set-terminal-coding-system 'utf-8)
