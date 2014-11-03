@@ -269,3 +269,15 @@ same directory as the org-buffer and insert a link to this file."
                               iimage-mode-image-filename-regex
                               "\\))") 1))
    ))
+
+(eval-after-load 'iimage-mode '(progn
+                            (my-iimage-config)))
+
+(flycheck-define-checker geiser-racket
+  "A Racket syntax checker using the Racket compiler.
+
+See URL `http://racket-lang.org/'."
+  :command ("racket" "-f" source-inplace)
+  :error-patterns
+  ((error line-start (file-name) ":" line ":" column ":" (message) line-end))
+  :modes scheme-mode)

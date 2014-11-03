@@ -176,6 +176,32 @@
 (global-set-key (kbd "C-c 2") 'org-sparse-tree)
 (global-set-key "\C-cb" 'org-iswitchb)
 
+(add-hook 'org-babel-after-execute-hook 'bh/display-inline-images 'append)
+                                        ; Make babel results blocks lowercase
+(setq org-babel-results-keyword "results")
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((emacs-lisp . t)
+    (dot . t)
+    (ditaa . t)
+    (R . t)
+    (python . t)
+    (ruby . t)
+    (gnuplot . t)
+    (clojure . t)
+    (sh . t)
+    (ledger . t)
+    (org . t)
+    (plantuml . t)
+    (latex . t)))
+(setq org-confirm-babel-evaluate nil)
+(setq org-image-actual-width nil)
+(setq org-image-actual-width 10)
+;; => always resize inline images to 300 pixels
+(setq org-image-actual-width '(400))
+;; => if there is a #+ATTR.*: width="200", resize to 200,
+;; otherwise resize to 400
+
 ;;; ===========================================================
 ;; iimage mode
 ;;; ===========================================================
@@ -188,24 +214,37 @@
 ;; (require 'sr-speedbar)
 ;; (global-set-key (kbd "M-2") 'sr-speedbar-toggle)
                                         ;(global-set-key (kbd "M-2") 'speedbar)
+
 ;; =============================================================
 ;;  auto-complete company-mode
 ;; =============================================================
+(dolist (hook '(scheme-mode-hook
+               ))
+        (add-hook hook 'company-mode))
+
+(eval-after-load 'company '(progn (define-key company-mode-map (kbd "M-1") 'company-complete)))
 ;; (global-set-key (kbd "M-[") 'company-complete-common)
 ;; (global-set-key (kbd "M-1") 'company-manual-begin)
 ;; (global-set-key (kbd "M-?") 'company-complete)
 ;; (global-set-key (kbd "M-1") 'company-select-next)
 (require 'auto-complete-config)
-(ac-config-default)
-;; (setq-default ac-sources '(ac-source-abbrev ac-source-dictionary ac-source-words-in-same-mode-buffers))
-;; (add-hook 'emacs-lisp-mode-hook 'ac-emacs-lisp-mode-setup)
-;; (add-hook 'c-mode-common-hook 'ac-cc-mode-setup)
-;; (add-hook 'ruby-mode-hook 'ac-ruby-mode-setup)
-;; (add-hook 'css-mode-hook 'ac-css-mode-setup)
-;; (add-hook 'auto-complete-mode-hook 'ac-common-setup)
+;; (ac-config-default)
+(setq-default ac-sources '(ac-source-abbrev ac-source-dictionary ac-source-words-in-same-mode-buffers))
+(add-hook 'emacs-lisp-mode-hook 'ac-emacs-lisp-mode-setup)
+(add-hook 'c-mode-common-hook 'ac-cc-mode-setup)
+(add-hook 'ruby-mode-hook 'ac-ruby-mode-setup)
+(add-hook 'css-mode-hook 'ac-css-mode-setup)
+(add-hook 'auto-complete-mode-hook 'ac-common-setup)
 ;; (global-auto-complete-mode nil)
 (define-key ac-mode-map (kbd "M-1") 'auto-complete)
 (define-key ac-completing-map (kbd "\C-s")  'ac-isearch)
+
+(dolist (hook '(emacs-lisp-mode-hook
+                c-mode-common-hook
+                ruby-mode-hook
+                css-mode-hook))
+  (add-hook hook 'auto-complete-mode))
+                
 ;; =============================================================
 ;;  代码跳转
 ;; =============================================================
@@ -298,33 +337,6 @@
 ;;; ============================================================
 ;;; org-mode 
 ;;; ============================================================
-(add-hook 'org-babel-after-execute-hook 'bh/display-inline-images 'append)
-                                        ; Make babel results blocks lowercase
-(setq org-babel-results-keyword "results")
-(org-babel-do-load-languages
- 'org-babel-load-languages
- '((emacs-lisp . t)
-    (dot . t)
-    (ditaa . t)
-    (R . t)
-    (python . t)
-    (ruby . t)
-    (gnuplot . t)
-    (clojure . t)
-    (sh . t)
-    (ledger . t)
-    (org . t)
-    (plantuml . t)
-    (latex . t)))
-(setq org-confirm-babel-evaluate nil)
-
-(setq org-image-actual-width nil)
-(setq org-image-actual-width 10)
-;; => always resize inline images to 300 pixels
-(setq org-image-actual-width '(400))
-;; => if there is a #+ATTR.*: width="200", resize to 200,
-;; otherwise resize to 400
-
 
 ;; (require 'dired-x)
 ;; (require 'ignoramus)
@@ -335,9 +347,9 @@
 ;;; =================================================================
 ;;; yasnippet
 ;;; =================================================================
-;; (require 'yasnippet)
-;; (yas-global-mode 1)
-(add-hook 'auto-complete-mode-hook 'yas-minor-mode-on) 
+(require 'yasnippet)
+(yas-global-mode 1)
+;; (add-hook 'auto-complete-mode-hook 'yas-minor-mode-on) 
 
 ;;; =================================================================
 ;;; php
@@ -414,6 +426,7 @@
   '(define-key css-mode-map (kbd "C-c b") 'web-beautify-css))
 
 (define-key emacs-lisp-mode-map (kbd "M-.") 'find-function-at-point)
+
 ;; (add-to-list 'load-path "~/.emacs.d/plugin/nxhtml/")
 ;; (autoload 'html-mode "autostart.el" nil t)
 ;; (load-file "~/.emacs.d/plugin/nxhtml/autostart.el")

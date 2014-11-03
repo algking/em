@@ -1,83 +1,54 @@
 ;;; ================================
 ;;; c-mode 配置
 ;;; =================================
-;; (defun my-c-mode-common-hook-func ()
-;;   (interactive)
-;;   "Function to be called when entering into c-mode."
-;;   (when (and (require 'auto-complete nil t) (require 'auto-complete-config nil t))
-;;     (auto-complete-mode t)
-;;     (make-local-variable 'ac-sources)
-;;     (setq ac-auto-start 1)
-;;     (setq ac-sources '(ac-source-words-in-same-mode-buffers
-;;                        ac-source-semantic))
-;;     (when (require 'auto-complete-etags nil t)
-;;       (add-to-list 'ac-sources 'ac-source-etags)
-;;       (setq ac-etags-use-document t))))
-
-;; (add-hook 'c-mode-common-hook 'my-c-mode-common-hook-func)
 
 
-;; (add-hook 'c++-mode-hook 'irony-mode)
-;; (add-hook 'c-mode-hook 'irony-mode)
-;; (add-hook 'objc-mode-hook 'irony-mode)
 
-;; replace the `completion-at-point' and `complete-symbol' bindings in
-;; irony-mode's buffers by irony-mode's function
-;; (defun my-irony-mode-hook ()
-;;   (define-key irony-mode-map [remap completion-at-point]
-;;     'irony-completion-at-point-async)
-;;   (define-key irony-mode-map [remap complete-symbol]
-;;     'irony-completion-at-point-async))
-;; (add-hook 'irony-mode-hook 'my-irony-mode-hook)
+
+(global-ede-mode t)
+(if (file-exists-p "/Users/algking/c-workspace/libevent/Makefile")
+    (ede-cpp-root-project "libevent"
+                          :name "libevent Config"
+                          :file "/Users/algking/c-workspace/libevent/Makefile"
+                          :system-include-path '("/usr/include")
+                          :include-path '(
+                                          "include"
+                                          "include/event2")))
+(global-flycheck-mode)
+(defun check-and-add-header-path (checkpath)
+  "Check if CHECKPATH exists and it's a directory, if it is a directory, then and it to 'ac-clang-cflags and 'flycheck-clang-include-path."
+  (if (file-directory-p checkpath)
+      (progn
+        (add-to-list 'flycheck-clang-include-path checkpath)
+        (add-to-list 'ac-clang-flags (format "%s%s" "-I" checkpath)))))
+
+
+(setq my-include-list '("include" "../include" "include/event2"))
+(defun my-clang-setup ()
+  "Setup local variables when loading a C/C++ file."
+  (mapc 'check-and-add-header-path my-include-list))
+
 
 
 (defun my-ac-cc-mode-setup ()
   (require 'auto-complete-c-headers)
   (add-to-list 'ac-sources 'ac-source-c-headers)
-
-  ;; (require 'auto-complete-clang-async)
-  ;; ;; (add-to-list 'ac-sources '(ac-source-clang-async))
-  ;; (setq ac-sources '(ac-source-clang-async))
-  ;; (add-to-list 'ac-sources 'ac-source-c-headers)
-
-  ;; (setq ac-clang-complete-executable "/usr/local/bin/clang-complete")
-  ;; (ac-clang-launch-completion-process)
-
   (require 'auto-complete-clang)
-  (setq ac-sources (append  '(ac-source-clang) ac-sources))
-  ;; (ac-clang-launch-completion-process)
-  )
+  (add-to-list 'ac-sources 'ac-source-clang )
+  (add-to-list 'ac-sources 'ac-source-semantic)
+  (setq  ac-clang-flags
+         (mapcar (lambda (item) (concat "-I" item))
+                 (split-string
+                  "/Library/Developer/CommandLineTools/usr/bin/../include/c++/v1
+                   /usr/local/include
+                   /Library/Developer/CommandLineTools/usr/bin/../lib/clang/6.0/include
+                   /Library/Developer/CommandLineTools/usr/include
+                   /usr/include"))))
 
-(defun my-ac-config ()
-  (add-hook 'c-mode-common-hook 'my-ac-cc-mode-setup)
-  (add-hook 'c-mode-hook 'my-ac-cc-mode-setup)
-  (add-hook 'c++-mode-hook 'my-ac-cc-mode-setup)
 
-  )
-
-(my-ac-config)
-
-(dolist (hook
-         '(c-mode-hook
-           c++-mode-hook))
-  (add-hook hook
-            (lambda ()
-              (local-set-key (kbd "C-c h d")
-                             (lambda ()
-                               (interactive)
-                               (manual-entry (current-word)))))))
-              
-            
-  
-
-(global-ede-mode t)
-(if (file-exists-p "/home/algking/Tools/erl-workspace/Libevent/Makefile")
-    (ede-cpp-root-project "libevent"
-                          :name "libevent Config"
-                          :file "/home/algking/Tools/erl-workspace/Libevent/Makefile"
-                          :system-include-path '("/usr/include"
-                                                 )
-                          :include-path '("/include/event2"
-                                          "/include"
-                                          "/")
-                          ))
+(dolist (hook (list 'c-mode-hook 'c++-mode-hook))
+  (add-hook hook (lambda ()
+                   (my-ac-cc-mode-setup)
+                   (my-clang-setup)
+                   (local-set-key (kbd "C-c h d") (lambda () (interactive)
+                                                    (manual-entry (current-word)))))))
