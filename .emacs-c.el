@@ -14,6 +14,15 @@
                           :include-path '(
                                           "include"
                                           "include/event2")))
+
+(ede-cpp-root-project "mac-libc"
+                      :name "mac-libc"
+                      :file "/Users/algking/c-workspace/Libc-1044.1.2/Makefile"
+                      :system-include-path '("/Users/algking/c-workspace/Libc-1044.1.2/include")
+                      :include-path '(
+                                      "include"
+                                      ))
+
 (global-flycheck-mode)
 (defun check-and-add-header-path (checkpath)
   "Check if CHECKPATH exists and it's a directory, if it is a directory, then and it to 'ac-clang-cflags and 'flycheck-clang-include-path."
@@ -50,5 +59,6 @@
   (add-hook hook (lambda ()
                    (my-ac-cc-mode-setup)
                    (my-clang-setup)
+                   ;; (ggtags-mode)
                    (local-set-key (kbd "C-c h d") (lambda () (interactive)
                                                     (manual-entry (current-word)))))))

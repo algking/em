@@ -13,7 +13,7 @@
 (add-to-list 'semantic-default-submodes 'global-semantic-idle-completions-mode t)
 ;; ;; ;; ;; ;; Enable Semantic
 (semantic-mode 1)
-                                        ;(setq enable-recursive-minibuffers t)
+;; (setq enable-recursive-minibuffers t)
 ;; (load-file "~/.emacs.d/plugin/xcscope/xcscope.el")
 ;; (require 'xcscope)
 ;;==============================================================
@@ -121,7 +121,7 @@
 (fset 'yes-or-no-p 'y-or-n-p)
 ;;; =============imenu=================
 (global-set-key  (kbd "C-c i") 'helm-semantic-or-imenu)
-(global-set-key (kbd "C-u") 'scroll-down-command)
+(global-set-key (kbd "C-u") 'scroll-down-command) 
 ;; (require 'eide)
 ;; (eide-start)
 (global-set-key (kbd "M-k") 'qiang-copy-line)
@@ -255,10 +255,10 @@
 (global-set-key [(super \,)] 'yc/return-func)
 (global-set-key [(meta \,)] 'pop-tag-mark)
 
-(define-key c++-mode-map [(meta \.)] 'yc/goto-func)
-(define-key c++-mode-map [(meta \,)] 'yc/return-func)
-(define-key c-mode-map [(meta \.)] 'yc/goto-func)
-(define-key c-mode-map [(meta \,)] 'yc/return-func)
+;; (define-key c++-mode-map [(meta \.)] 'yc/goto-func)
+;; (define-key c++-mode-map [(meta \,)] 'yc/return-func)
+;; (define-key c-mode-map [(meta \.)] 'yc/goto-func)
+;; (define-key c-mode-map [(meta \,)] 'yc/return-func)
                                         ;(local-set-key [M-S-f12] 'yc/return-func)
                                         ;  (local-set-key (kbd "C-x SPC") 'yc/store-mru-tag)
 
@@ -349,7 +349,7 @@
 ;;; =================================================================
 (require 'yasnippet)
 (yas-global-mode 1)
-;; (add-hook 'auto-complete-mode-hook 'yas-minor-mode-on) 
+(add-hook 'auto-complete-mode-hook 'yas-minor-mode-on) 
 
 ;;; =================================================================
 ;;; php

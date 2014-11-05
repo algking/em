@@ -1,1 +1,70 @@
-(nil)
+((("prelude-c" .
+   [0 0 0 0 0 0 0 0 1])
+  ("prev" .
+   [0 0 0 1])
+  ("message" .
+   [0 0 0 0 0 0 1])
+  ("add-to-list" .
+   [0 0 0 0 0 0 0 0 0 1 0])
+  ("company-mode" .
+   [1 0 0 0 0 0 0 0 0 0 0 0])
+  ("add-hook" .
+   [1 0 0 0 0 0 0 0])
+  ("my-org-screenshot" .
+   [0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0])
+  ("exit" .
+   [1 0 0 0])
+  ("JAVA_HOME" .
+   [0 0 0 0 1 0 0 0 0])
+  ("viper-mode" .
+   [0 0 0 1 0 0 0 0 0 0])
+  ("clojure" .
+   [0 0 0 1 0 0 0])
+  ("nil" .
+   [1 0 0])
+  ("java-mode" .
+   [1 0 0 0 0 0 0 0 0])
+  ("autoload" .
+   [0 0 0 0 0 0 0 1])
+  ("clojure.tools.nrepl.server" .
+   [0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0])
+  ("Auto-start" .
+   [0 0 0 0 0 0 0 0 0 1])
+  ("define-key" .
+   [0 0 0 0 1 0 0 0 0 0])
+  ("normalizedUrl" .
+   [1 0 0 0 0 0 0 0 0 0 0 0 0])
+  ("normalization" .
+   [0 0 0 1 0 0 0 0 0 0 0 0 0])
+  ("progn" .
+   [1 0 0 0 0])
+  ("my-org-config" .
+   [1 0 0 0 0 0 0 0 0 0 0 0 0])
+  ("dolist" .
+   [1 0 0 0 0 0])
+  ("hook" .
+   [3 0 0 0])
+  ("emacs-lisp-mode" .
+   [0 0 0 0 0 0 0 0 0 0 1 0 0 0 0])
+  ("emacs-lisp-mode-hook" .
+   [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0])
+  ("c-mode-common-hook" .
+   [0 0 0 0 0 0 0 0 0 0 0 2 0 0 0 0 0 0])
+  ("ruby-mode-hook" .
+   [0 0 0 0 0 0 0 0 0 0 0 1 0 0])
+  ("disabled" .
+   [0 0 0 0 0 0 0 1])
+  ("disabledUntil" .
+   [2 0 0 0 0 0 0 0 0 0 0 0 0])
+  ("import" .
+   [0 0 0 1 0 0])
+  ("util" .
+   [0 0 1 0])
+  ("java" .
+   [0 0 0 1])
+  ("int" .
+   [1 0 0])
+  ("ac-sources" .
+   [3 0 0 0 0 0 0 0 0 0])
+  ("list" .
+   [1 0 0 0])))

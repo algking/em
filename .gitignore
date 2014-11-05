@@ -24,3 +24,6 @@ places
 .smex-items
 /.org-id-locations
 /bookmarks
+/projectile-bookmarks.eld
+/prelude-back
+/ac-comphist.dat

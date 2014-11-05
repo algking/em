@@ -44,3 +44,6 @@
 [submodule "plugin/tern"]
 	path = plugin/tern
 	url = https://github.com/marijnh/tern.git
+[submodule "myprelude"]
+	path = myprelude
+	url = https://github.com/algking/prelude.git
