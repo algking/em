@@ -47,3 +47,5 @@
 
 (require 'linum)
 (global-linum-mode t)
+
+(global-hl-line-mode)

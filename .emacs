@@ -1,4 +1,5 @@
 ;; (load-file "~/.emacs.d/plugin/cedet-bzr/trunk/cedet-devel-load.el")
+;; (load-file "~/.emacs.d/plugin/cedet-bzr/trunk/contrib/cedet-contrib-load.el")
 (load-file "~/.emacs.d/.emacs-init.el")
 (load-file "~/.emacs.d/.emacs-myfun.el")
 (load-file "~/.emacs.d/.emacs-c.el")
@@ -60,8 +61,8 @@
 ;;erlang 配置
 ;;==============================================================
 ;; (load-file "~/.emacs.d/.emacs-erlang.el")
-(add-to-list 'load-path "~/.emacs.d")
-(autoload 'erlang-mode ".emacs-erlang.el" nil t)
+;; (add-to-list 'load-path "~/.emacs.d")
+(autoload 'erlang-mode "~/.emacs.d/.emacs-erlang.el" nil t)
 
 
 ;;==============================================================
@@ -115,8 +116,8 @@
 ;;==============================================================
 ;; mini-buffer buffer complete/switch window switch 
 ;;==============================================================
-(icomplete-mode 1)
-(define-key minibuffer-local-completion-map (kbd "SPC") 'minibuffer-complete-word)
+;; (icomplete-mode 1)
+;; (define-key minibuffer-local-completion-map (kbd "\t") 'minibuffer-complete-word)
 (global-set-key (kbd "C-c y") 'ido-switch-buffer)
 (fset 'yes-or-no-p 'y-or-n-p)
 ;;; =============imenu=================
@@ -230,8 +231,9 @@
 (require 'auto-complete-config)
 ;; (ac-config-default)
 (setq-default ac-sources '(ac-source-abbrev ac-source-dictionary ac-source-words-in-same-mode-buffers))
-(add-hook 'emacs-lisp-mode-hook 'ac-emacs-lisp-mode-setup)
-(add-hook 'c-mode-common-hook 'ac-cc-mode-setup)
+;; (add-hook 'emacs-lisp-mode-hook 'ac-emacs-lisp-mode-setup)
+(add-hook 'c-mode-hook 'ac-cc-mode-setup)
+(add-hook 'c++-mode-hook 'ac-cc-mode-setup)
 (add-hook 'ruby-mode-hook 'ac-ruby-mode-setup)
 (add-hook 'css-mode-hook 'ac-css-mode-setup)
 (add-hook 'auto-complete-mode-hook 'ac-common-setup)
@@ -240,7 +242,8 @@
 (define-key ac-completing-map (kbd "\C-s")  'ac-isearch)
 
 (dolist (hook '(emacs-lisp-mode-hook
-                c-mode-common-hook
+                ;; c-mode-hook 
+                ;; c++-mode-hook
                 ruby-mode-hook
                 css-mode-hook))
   (add-hook hook 'auto-complete-mode))
@@ -287,8 +290,8 @@
 ;; =============================================================
 ;;  git magit git-gutter
 ;; =============================================================
-(global-git-gutter-mode t)
-(git-gutter:linum-setup)
+;; (global-git-gutter-mode t)
+;; (git-gutter:linum-setup)
 
 ;; =============================================================
 ;;  shell complete
@@ -349,15 +352,18 @@
 ;;; =================================================================
 (require 'yasnippet)
 (yas-global-mode 1)
-(add-hook 'auto-complete-mode-hook 'yas-minor-mode-on) 
+;; (add-hook 'auto-complete-mode-hook 'yas-minor-mode-on) 
 
 ;;; =================================================================
 ;;; php
 ;;; =================================================================
-(add-hook 'php-mode-hook 'eldoc-mode)
-(add-hook 'php-mode-hook 'ggtags-mode)
 (global-set-key (kbd  "\C-ce" ) 'dash-at-point)
-
+(add-hook 'php-mode-hook
+          (lambda ()
+            (add-to-list 'company-backends 'company-gtags)
+            (ggtags-mode)
+            (eldoc-mode)
+            ))
 
 ;;; =================================================================
 ;;; package-initialize

@@ -30,7 +30,7 @@
  '(
    company
    ac-js2
-   git-gutter
+   ;; git-gutter
    readline-complete
    auto-complete-clang
    ;; alpha
@@ -97,6 +97,7 @@
    ;; slime-repl
    ;; smex
    ;; w3m
+   multi-term
    web
 
    )  )
