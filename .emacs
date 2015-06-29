@@ -96,7 +96,7 @@
   ;; (add-hook 'cider-mode-hook 'ac-cider-setup)
   (add-hook 'cider-repl-mode-hook 'ac-cider-setup)
   (add-hook 'cider-repl-mode-hook 'smartparens-strict-mode)
-  ;; (auto-complete-mode -1)
+  ;; (auto-plete-mode -1)
   )
 (eval-after-load "clojure-mode" '(my-clojure-config))
 
@@ -230,12 +230,13 @@
 ;; (global-set-key (kbd "M-1") 'company-select-next)
 (require 'auto-complete-config)
 ;; (ac-config-default)
-(setq-default ac-sources '(ac-source-abbrev ac-source-dictionary ac-source-words-in-same-mode-buffers))
-;; (add-hook 'emacs-lisp-mode-hook 'ac-emacs-lisp-mode-setup)
+(setq ac-sources (append '(ac-source-abbrev ac-source-dictionary ac-source-yasnippet) ac-sources))
+(add-hook 'emacs-lisp-mode-hook 'ac-emacs-lisp-mode-setup)
 (add-hook 'c-mode-hook 'ac-cc-mode-setup)
 (add-hook 'c++-mode-hook 'ac-cc-mode-setup)
 (add-hook 'ruby-mode-hook 'ac-ruby-mode-setup)
 (add-hook 'css-mode-hook 'ac-css-mode-setup)
+(add-hook 'objc-mode-hook 'ac-cc-mode-setup)
 (add-hook 'auto-complete-mode-hook 'ac-common-setup)
 ;; (global-auto-complete-mode nil)
 (define-key ac-mode-map (kbd "M-1") 'auto-complete)
@@ -245,9 +246,10 @@
                 ;; c-mode-hook 
                 ;; c++-mode-hook
                 ruby-mode-hook
+                objc-mode-hook
                 css-mode-hook))
   (add-hook hook 'auto-complete-mode))
-                
+(add-hook 'auto-complete-mode-hook '(lambda () (company-mode 0)))                
 ;; =============================================================
 ;;  代码跳转
 ;; =============================================================
@@ -360,10 +362,17 @@
 (global-set-key (kbd  "\C-ce" ) 'dash-at-point)
 (add-hook 'php-mode-hook
           (lambda ()
-            (add-to-list 'company-backends 'company-gtags)
+            ;; (add-to-list 'company-backends 'company-gtags)
+            ;; (add-to-list 'company-backends 'company-yasnippet)
+            ;; (require 'ac-php)
+            ;; (setq ac-sources  '(ac-source-php ) )
+            ;; (define-key php-mode-map  (kbd "M-.") 'ac-php-find-symbol-at-point)   ;goto define
+            ;; (define-key php-mode-map  (kbd "M-,") 'ac-php-location-stack-back   ) 
+            (c-set-style "symfony2")
             (ggtags-mode)
             (eldoc-mode)
             ))
+(eval-after-load 'php-mode '(push '(company-gtags :with php-extras-company) company-backends))
 
 ;;; =================================================================
 ;;; package-initialize
@@ -390,6 +399,7 @@
 (add-hook 'js2-mode-hook (lambda () (tern-mode t)))
 (add-hook 'js-mode-hook 'js2-mode)
 (add-hook 'js2-mode-hook 'ac-js2-mode)
+;; (add-to-list 'company-backends 'company-tern)
 (add-hook 'js2-mode-hook 'skewer-mode)
 (add-hook 'css-mode-hook 'skewer-css-mode)
 (add-hook 'css-mode-hook 'rainbow-mode)
@@ -397,6 +407,14 @@
 (add-hook 'html-mode-hook 'skewer-html-mode)
 (add-hook 'html-mode-hook 'auto-complete-mode)
 (add-hook 'html-mode-hook 'rainbow-mode)
+
+(add-hook 'html-mode-hook 'ac-html-enable)
+
+(add-hook 'haml-mode-hook 'ac-haml-enable)
+(add-hook 'jade-mode-hook 'ac-jade-enable)
+(add-hook 'slim-mode-hook 'ac-slim-enable)
+
+
 (eval-after-load 'js2-mode
   '(progn
      (define-key js2-mode-map (kbd "C-c C-n") 'nodejs-repl)                              
@@ -408,6 +426,8 @@
 (add-hook 'css-mode-hook 'ac-emmet-css-setup)
 (add-hook 'sgml-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
 (add-hook 'css-mode-hook  'emmet-mode) ;; enable Emmet's css abbreviation.
+(add-hook 'web-mode-hook 'emmet-mode)
+(add-hook 'web-mode-hook 'ac-emmet-html-setup)
 ;; (global-set-key (kbd "M-j" ) 'emmet-expand-line)
 (add-hook 'emmet-mode-hook 
 (lambda ()
@@ -480,5 +500,14 @@
 ;; ;           (pop-to-buffer (enh-base-create-note-common (buffer-name) t t t))
 ;;            (enh-base-create-note-common (buffer-name) nil nil nil t))))))
 
+
+
+;;=============================
+
+;; (load-file "~/.emacs.d/emaXcode.el")
+;; (require 'emaXcode)
+;; (add-to-list 'load-path "~/.emacs.d/emaXcode.el")
+`
+(load-file "~/.emacs.d/flycheck-objc.el")
 
 

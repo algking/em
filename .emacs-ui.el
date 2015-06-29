@@ -6,15 +6,18 @@
 (global-set-key [M-f11] 'tool-bar-mode)
 (tool-bar-mode -1)
 (menu-bar-mode 1)
+(require 'multiple-cursors)
 (setq inhibit-startup-message t);启动不出现闪屏
 ;;(global-set-key [M-left] 'windmove-left)
 ;;(global-set-key [M-right] 'windmove-right)
 ;;(global-set-key [M-up] 'windmove-up)
 ;;(global-set-key [M-down] 'windmove-down)
  ;;(set-frame-parameter (selected-frame) 'alpha '(<active> [<inactive>]))
-;; transparency
-(set-frame-parameter (selected-frame) 'alpha '(88 50))
-(add-to-list 'default-frame-alist '(alpha 88 50))
+
+;; ==============transparency==================
+;; ============================================
+(set-frame-parameter (selected-frame) 'alpha '(100 100))
+;; (add-to-list 'default-frame-alist '(alpha 88 50))
 (global-set-key (kbd "C-c 1") 'toggle-transparency)
 
 (setq current-language-environment "UTF-8")

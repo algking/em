@@ -28,13 +28,17 @@
   "Check if CHECKPATH exists and it's a directory, if it is a directory, then and it to 'ac-clang-cflags and 'flycheck-clang-include-path."
   (if (file-directory-p checkpath)
       (progn
+        (message "my-cc-clang-setup")
+        ;; (add-to-list 'ac-clang-flags (format "%s%s" "-I" checkpath))
         (add-to-list 'flycheck-clang-include-path checkpath)
-        (add-to-list 'ac-clang-flags (format "%s%s" "-I" checkpath)))))
+        ;; (add-to-list 'flycheck-clang-args (format "%s%s" "-I" checkpath))
+        )))
 
 
-(setq my-include-list '("include" "../include" "include/event2"))
-(defun my-clang-setup ()
+(defun my-cc-clang-setup ()
+  (setq my-include-list '("./include" "../include" "./include/event2"))
   "Setup local variables when loading a C/C++ file."
+  (setq flycheck-clang-include-path nil)
   (mapc 'check-and-add-header-path my-include-list))
 
 
@@ -48,17 +52,35 @@
   (setq  ac-clang-flags
          (mapcar (lambda (item) (concat "-I" item))
                  (split-string
-                  "/Library/Developer/CommandLineTools/usr/bin/../include/c++/v1
+                  "
+                   /Library/Developer/CommandLineTools/usr/bin/../include/c++/v1
                    /usr/local/include
-                   /Library/Developer/CommandLineTools/usr/bin/../lib/clang/6.0/include
+                   /Library/Developer/CommandLineTools/usr/bin/../lib/clang/6.1.0/include
                    /Library/Developer/CommandLineTools/usr/include
-                   /usr/include"))))
+                   /usr/include
+                  "
+                  ))))
 
 
 (dolist (hook (list 'c-mode-hook 'c++-mode-hook))
   (add-hook hook (lambda ()
-                   (my-ac-cc-mode-setup)
-                   (my-clang-setup)
+                   ;; (my-ac-cc-mode-setup)
+                   (my-cc-clang-setup)
                    ;; (ggtags-mode)
                    (local-set-key (kbd "C-c h d") (lambda () (interactive)
                                                     (manual-entry (current-word)))))))
+;; compnay-clang
+(eval-after-load 'cc-mode '(progn 
+                             ;; (my-cc-clang-setup)
+                             (add-to-list 'company-backends 'company-c-headers)
+                             (setq company-backends (delete 'company-semantic company-backends))))
+
+(split-string
+ "
+                   /Library/Developer/CommandLineTools/usr/bin/../include/c++/v1
+                   /usr/local/include
+                   /Library/Developer/CommandLineTools/usr/bin/../lib/clang/6.1.0/include
+                   /Library/Developer/CommandLineTools/usr/include
+                   /usr/include
+                  "
+ )
