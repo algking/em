@@ -49,16 +49,19 @@
 ;; ================================company-distel===============
 ;; =============================================================
 (add-to-list 'load-path "~/.emacs.d/el-get/company-distel")
-(require 'auto-complete-distel)
-(setq ac-sources '(distel-completions))
-;; (require 'company-distel)
-;; (add-to-list 'company-backends 'company-distel)
+;; (require 'auto-complete-distel)
+;; (setq ac-sources '(append (distel-completions ) ac-sources))
+(require 'company-distel)
+(add-to-list 'company-backends 'company-distel)
 ;; (require 'company-distel-frontend)
 
-(add-hook 'erlang-mode-hook 'flymake-mode-on)
-(add-hook 'erlang-mode-hook 'viper-mode)
-(add-hook 'erlang-mode-hook 'turn-on-orgtbl)
-(add-hook 'erlang-mode-hook 'turn-on-orgstruct)
+(add-hook 'erlang-mode-hook 
+          (lambda()
+            (flymake-mode-on)
+            (viper-mode)
+            (turn-on-orgtbl)
+            (turn-on-orgstruct)
+))
 
  ;; A number of the erlang-extended-mode key bindings are useful in the shell too
  (defconst distel-shell-keys

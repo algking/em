@@ -1,5 +1,6 @@
 ;; (load-file "~/.emacs.d/plugin/cedet-bzr/trunk/cedet-devel-load.el")
 ;; (load-file "~/.emacs.d/plugin/cedet-bzr/trunk/contrib/cedet-contrib-load.el")
+(setq prelude-theme 'solarized-light)
 (load-file "~/.emacs.d/.emacs-init.el")
 (load-file "~/.emacs.d/.emacs-myfun.el")
 (load-file "~/.emacs.d/.emacs-c.el")
@@ -17,6 +18,8 @@
 ;; (setq enable-recursive-minibuffers t)
 ;; (load-file "~/.emacs.d/plugin/xcscope/xcscope.el")
 ;; (require 'xcscope)
+
+
 ;;==============================================================
 ;; 自动备份
 ;;==============================================================
@@ -46,13 +49,15 @@
 ;;==============================================================
 (global-set-key (kbd "C-x C-f") 'helm-find-files)
 (global-set-key (kbd "C-c j") 'helm-occur)
-(global-set-key (kbd "C-c m") 'helm-do-grep)
+(global-set-key (kbd "C-c m") 'helm-grep-do-git-grep)
 
 
 (global-set-key [f4] 'compile)
 (global-set-key (kbd "C-c 3") 'toggle-viper-mode)
 (setq viper-mode t)
 (require 'viper)
+;; (require 'evil)
+;; (evil-mode 1)
 
 (setq global-hl-line-sticky-flag nil)
 (global-hl-line-mode 0)
@@ -196,13 +201,19 @@
     (plantuml . t)
     (latex . t)))
 (setq org-confirm-babel-evaluate nil)
-(setq org-image-actual-width nil)
-(setq org-image-actual-width 10)
 ;; => always resize inline images to 300 pixels
-(setq org-image-actual-width '(400))
+;; (setq org-image-actual-width '(550))
+
 ;; => if there is a #+ATTR.*: width="200", resize to 200,
 ;; otherwise resize to 400
+(require 'org-alert)
+(setq org-alert-interval 2400)
+(setq org-alert-notification-title "TODO:")
+(org-alert-enable)
 
+(add-hook 'markdown-mode-hook 'iimage-mode)
+(add-hook 'org-mode-hook 'org-display-inline-images)
+(setq org-startup-with-inline-images t)
 ;;; ===========================================================
 ;; iimage mode
 ;;; ===========================================================
@@ -222,7 +233,7 @@
 (dolist (hook '(scheme-mode-hook
                ))
         (add-hook hook 'company-mode))
-
+(company-quickhelp-mode 1)
 (eval-after-load 'company '(progn (define-key company-mode-map (kbd "M-1") 'company-complete)))
 ;; (global-set-key (kbd "M-[") 'company-complete-common)
 ;; (global-set-key (kbd "M-1") 'company-manual-begin)
@@ -242,12 +253,15 @@
 (define-key ac-mode-map (kbd "M-1") 'auto-complete)
 (define-key ac-completing-map (kbd "\C-s")  'ac-isearch)
 
-(dolist (hook '(emacs-lisp-mode-hook
+(dolist (hook '(;; emacs-lisp-mode-hook
                 ;; c-mode-hook 
                 ;; c++-mode-hook
-                ruby-mode-hook
+                ;; ruby-mode-hook
+                web-mode-hook
                 objc-mode-hook
-                css-mode-hook))
+                sgml-mode-hook
+                css-mode-hook
+                ))
   (add-hook hook 'auto-complete-mode))
 (add-hook 'auto-complete-mode-hook '(lambda () (company-mode 0)))                
 ;; =============================================================
@@ -270,12 +284,12 @@
 ;; =============================================================
 ;;  multi-shell mode
 ;; =============================================================
-(load-file "~/.emacs.d/plugin/muti-shell/multi-shell.el")
+;; (load-file "~/.emacs.d/plugin/muti-shell/multi-shell.el")
 ;; (require 'multi-shell)
-(setq multi-shell-command "/bin/bash")
-(global-set-key  (kbd "M-3") 'multi-shell-prev)
-(global-set-key  (kbd "M-4") 'multi-shell-next)
-(global-set-key [f7] 'multi-shell-new)
+;; (setq multi-shell-command "/bin/bash")
+;; (global-set-key  (kbd "M-3") 'multi-shell-prev)
+;; (global-set-key  (kbd "M-4") 'multi-shell-next)
+;; (global-set-key [f7] 'multi-shell-new)
 
 ;; =============================================================
 ;;  code folding
@@ -283,11 +297,14 @@
 (define-key yafolding-mode-map (kbd "C-c C-q") 'yafolding-toggle-all)
 (define-key yafolding-mode-map (kbd "C-c C-o") 'yafolding-toggle-element)
 (define-key yafolding-mode-map (kbd "C-c C-e") 'yafolding-hide-element)
-(dolist (hook (list 'html-mode-hook
-                    'php-mode-hook
-))
-  (add-hook hook 'yafolding-mode)
-  )
+(add-hook 'prog-mode-hook 'yafolding-mode)
+          
+
+;; (dolist (hook (list 'html-mode-hook
+;;                     'php-mode-hook
+;; ))
+;;   (add-hook hook 'yafolding-mode)
+;;   )
 
 ;; =============================================================
 ;;  git magit git-gutter
@@ -337,8 +354,9 @@
 ;; (add-hook 'org-mode-hook 'table-recognize)
 ;; (add-hook 'markdown-mode-hook 'table-recognize)
 ;; (add-hook 'erlang-mode-hook 'table-recognize)
-(add-hook 'markdown-mode-hook 'turn-on-orgtbl)
-
+(add-hook 'gfm-mode-hook 'turn-on-orgtbl)
+;; (add-hook 'gfm-mode-hook (lambda ()
+;;                            (add-hook 'after-save-hook 'gh-md-render-buffer nil 'make-it-local)))
 ;;; ============================================================
 ;;; org-mode 
 ;;; ============================================================
@@ -393,26 +411,36 @@
 ;; (autoload 'tern-mode "tern.el" nil t)
 (eval-after-load 'tern
   '(progn
-     (require 'tern-auto-complete)
-     (tern-ac-setup)))
+     (add-to-list 'company-backends 'company-tern)
+     ;; (require 'tern-auto-complete)
+     ;; (tern-ac-setup)
+     ))
 
-(add-hook 'js2-mode-hook (lambda () (tern-mode t)))
-(add-hook 'js-mode-hook 'js2-mode)
-(add-hook 'js2-mode-hook 'ac-js2-mode)
+;; (add-hook 'js2-mode-hook (lambda () (tern-mode t)))
+(add-hook 'js-mode-hook (lambda () (tern-mode t)))
+;; (require 'js2-refactor)
+;; (add-hook 'js2-mode-hook #'js2-refactor-mode)
+;; (js2r-add-keybindings-with-prefix "C-c C-m")
+
+(add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
+;; (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
+;; (add-hook 'js-mode-hook 'js2-mode)
+;; (add-hook 'js2-mode-hook 'ac-js2-mode)
 ;; (add-to-list 'company-backends 'company-tern)
-(add-hook 'js2-mode-hook 'skewer-mode)
+;; (add-hook 'js2-mode-hook 'skewer-mode)
 (add-hook 'css-mode-hook 'skewer-css-mode)
 (add-hook 'css-mode-hook 'rainbow-mode)
+(add-hook 'web-mode-hook 'rainbow-mode)
 (add-hook 'css-mode-hook 'auto-complete-mode)
 (add-hook 'html-mode-hook 'skewer-html-mode)
 (add-hook 'html-mode-hook 'auto-complete-mode)
 (add-hook 'html-mode-hook 'rainbow-mode)
 
-(add-hook 'html-mode-hook 'ac-html-enable)
+;; (add-hook 'html-mode-hook 'ac-html-enable)
 
-(add-hook 'haml-mode-hook 'ac-haml-enable)
-(add-hook 'jade-mode-hook 'ac-jade-enable)
-(add-hook 'slim-mode-hook 'ac-slim-enable)
+;; (add-hook 'haml-mode-hook 'ac-haml-enable)
+;; (add-hook 'jade-mode-hook 'ac-jade-enable)
+;; (add-hook 'slim-mode-hook 'ac-slim-enable)
 
 
 (eval-after-load 'js2-mode
@@ -441,6 +469,9 @@
      (require 'tagedit)
      (tagedit-add-paredit-like-keybindings)
      (add-hook 'html-mode-hook (lambda () (tagedit-mode 1)))))
+
+(eval-after-load 'javascript-mode
+  '(define-key javascript-mode-map (kbd "C-c b") 'web-beautify-js))
 
 (eval-after-load 'js2-mode
   '(define-key js2-mode-map (kbd "C-c b") 'web-beautify-js))
@@ -511,3 +542,5 @@
 (load-file "~/.emacs.d/flycheck-objc.el")
 
 
+
+(org-agenda-list)

@@ -204,6 +204,7 @@ and when jumping back, it will be removed.")
 ;; ============================================================
 ;; 截图
 ;; ============================================================
+(require 'iimage)
 (defun my-org-screenshot ()
   "Take a screenshot into a time stamped unique-named file in the
 same directory as the org-buffer and insert a link to this file."
@@ -213,10 +214,18 @@ same directory as the org-buffer and insert a link to this file."
          (make-temp-name
           (concat (file-name-base)
                   "_"
-                  (format-time-string "%Y%m%d_%H%M%S_")) ) ".png"))
+                  (format-time-string "%Y%m%d_%H%M%S_")))
+         ))
+  (setq filename_2x (concat "~/note/images/"  filename "@2x.png"))
+  (setq filename_real (concat "~/note/images/" filename ".png"))
+  
   (call-process-shell-command "screencapture" nil nil nil
-                              (concat " -i ~/note/images/" filename))
-  (insert (concat "[[~/note/images/" filename "]]"))
+                              (concat " -i " filename_real))
+  
+  ;; (call-process-shell-command "convert" nil nil nil
+  ;;                             (concat " -scale 50% -quality 100% " filename_2x " " filename_real ))
+
+  (insert (concat "[[~/note/images/" filename ".png" "]]"))
   (org-display-inline-images))
 
 (defun my-md-screenshot ()
@@ -232,6 +241,7 @@ same directory as the org-buffer and insert a link to this file."
   (call-process-shell-command "screencapture" nil nil nil
                               (concat " -i ~/Documents/algking.github.com/public/img/" filename))
   (insert (concat "![image](/public/img/" filename ")"))
+  (iimage-mode-buffer iimage-mode)
   )
 
 (global-set-key (kbd "s-1") 'my-org-screenshot)
@@ -247,28 +257,33 @@ same directory as the org-buffer and insert a link to this file."
   '(progn (my-org-config)))
 
 
-(defun my-iimage-config ()
-  (
-   (setq iimage-mode-image-search-path '(list "." ".." "../public/img/"))
 
-   (add-to-list 'iimage-mode-image-regex-alist ; match: {% img xxx %}
-                (cons (concat "{% img /?\\("
-                              iimage-mode-image-filename-regex
-                              "\\)  %}") 1))
-   (add-to-list 'iimage-mode-image-regex-alist ; match: {% img xxx num %}
-                (cons (concat "{% img /?\\("
-                              iimage-mode-image-filename-regex
-                              "\\) [0-9]+ %}") 1))
-   (add-to-list 'iimage-mode-image-regex-alist ; match: ![xxx](/xxx)
-                (cons (concat "!\\[.*?\\](/\\("
-                              iimage-mode-image-filename-regex
-                              "\\))") 1))
 
-   (add-to-list 'iimage-mode-image-regex-alist ; match: ![xxx](http://everet.org/xxx)
-                (cons (concat "!\\[.*?\\](/public/img/\\("
-                              iimage-mode-image-filename-regex
-                              "\\))") 1))
-   ))
+ (setq iimage-mode-image-search-path '(list "." "/Users/algking/Documents/algking.github.com/public/img/"
+                                            ))
+;; (add-to-list 'iimage-mode-image-regex-alist ; match: ![xxx](/xxx)
+;;              (cons (concat "!\\[.*\\](/public/img/\\("
+;;                            iimage-mode-image-filename-regex
+;;                            "\\))") 1))
+
+;; (defun my-iimage-config ()
+;;   (
+;;    (setq iimage-mode-image-search-path '(list "." "/Users/algking/Documents/algking.github.com/public/img/"
+;;                                               ))
+
+;;    (add-to-list 'iimage-mode-image-regex-alist ; match: {% img xxx %}
+;;                 (cons (concat "{% img /?\\("
+;;                               iimage-mode-image-filename-regex
+;;                               "\\)  %}") 1))
+;;    (add-to-list 'iimage-mode-image-regex-alist ; match: {% img xxx num %}
+;;                 (cons (concat "{% img /?\\("
+;;                               iimage-mode-image-filename-regex
+;;                               "\\) [0-9]+ %}") 1))
+;;    (add-to-list 'iimage-mode-image-regex-alist ; match: ![xxx](/xxx)
+;;                 (cons (concat "!\\[.*\\](/public/img/\\("
+;;                               iimage-mode-image-filename-regex
+;;                               "\\))") 2))
+;;    ))
 
 (eval-after-load 'iimage-mode '(progn
                             (my-iimage-config)))
@@ -281,3 +296,54 @@ See URL `http://racket-lang.org/'."
   :error-patterns
   ((error line-start (file-name) ":" line ":" column ":" (message) line-end))
   :modes scheme-mode)
+
+;; markdown 解析
+(defun gk-markdown-preview-buffer () 
+  (interactive)
+  (let* ((buf-this (buffer-name (current-buffer)))
+         (buf-html (get-buffer-create
+                    (format "*gk-md-html (%s)*" buf-this))))
+    (markdown-other-window (buffer-name buf-html))
+    (shr-render-buffer buf-html)
+    (eww-mode)
+    (kill-buffer buf-html)))
+
+
+
+
+;; collaborate viper
+;; (eval-after-load "viper"
+;;   '(add-to-list 'viper-emacs-state-mode-list 'undo-tree-visualizer-mode t))
+
+;; for conserted viper-mode (non like Vi style undo)
+;; Vi like なUndo(insertモードでの編集作業が一つのundoになる) にしたい場合は
+;; remove-undo-mark ではなく viper-adjust-undo を使用するべし
+;; (eval-after-load 'viper
+;;   '(progn
+;;       (defun undo-tree-viper-remove-undo-mark ()
+;;         "Remove viper-buffer-undo-list-mark from buffer-undo-list.
+;; '(nil foo nil viper nil undo-tree-canary) => '(nil foo nil undo-tree-canary)"
+;;         (when viper-undo-needs-adjustment
+;;           (let ((inhibit-quit t))
+;;             (setq viper-undo-needs-adjustment nil)
+;;             (when (listp buffer-undo-list)
+;;               (let (find-pos)
+;;                 (while (setq find-pos (position viper-buffer-undo-list-mark buffer-undo-list))
+;;                   (let ((before-list (subseq buffer-undo-list 0 (if (nth (1- find-pos) buffer-undo-list)
+;;                                                                     find-pos
+;;                                                                   (1- find-pos))))
+;;                         (after-list (subseq buffer-undo-list (1+ find-pos))))
+;;                     (setq buffer-undo-list (nconc before-list after-list)))))))))
+
+;;     (defadvice undo-list-transfer-to-tree (before remove-viper-mark activate)
+;;       (when (boundp viper-undo-needs-adjustment)
+;;         (undo-tree-viper-remove-undo-mark)))
+    
+;;     (defadvice viper-change-state-to-vi (before remove-viper-mark activate)
+;;       (when (boundp viper-undo-needs-adjustment)
+;;         (undo-tree-viper-remove-undo-mark)))
+
+;;     ))
+ 
+  
+ 

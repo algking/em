@@ -2,6 +2,7 @@
 ;; mini-buffer buffer complete/switch window switch 启动UI
 ;;==============================================================
 ;;启动页面，粘贴外部可用，工具栏
+
 (setq x-select-enable-clipboard t)
 (global-set-key [M-f11] 'tool-bar-mode)
 (tool-bar-mode -1)
@@ -51,4 +52,11 @@
 (require 'linum)
 (global-linum-mode t)
 
+;; (global-nlinum-mode t)
+;; Preset width nlinum
+;; (add-hook 'nlinum-mode-hook
+;;           (lambda ()
+;;             (setq nlinum--width
+;;                   (length (number-to-string
+;;                            (count-lines (point-min) (point-max)))))))
 (global-hl-line-mode)
