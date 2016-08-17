@@ -49,6 +49,9 @@
                       (font-spec :family chinese :size chinese-size))))
 (set-font "Monaco" "YaHei Consolas Hybrid" 14 16)
 
+;; (when (member "YaHei Consolas Hybrid" (font-family-list))
+;;   (set-face-attribute 'default nil :font "YaHei Consolas Hybrid-12"))
+
 (require 'linum)
 (global-linum-mode t)
 

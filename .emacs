@@ -1,6 +1,5 @@
 ;; (load-file "~/.emacs.d/plugin/cedet-bzr/trunk/cedet-devel-load.el")
 ;; (load-file "~/.emacs.d/plugin/cedet-bzr/trunk/contrib/cedet-contrib-load.el")
-(setq prelude-theme 'solarized-light)
 (load-file "~/.emacs.d/.emacs-init.el")
 (load-file "~/.emacs.d/.emacs-myfun.el")
 (load-file "~/.emacs.d/.emacs-c.el")
@@ -47,7 +46,7 @@
 ;;==============================================================
 ;; helm
 ;;==============================================================
-(global-set-key (kbd "C-x C-f") 'helm-find-files)
+;; (global-set-key (kbd "C-x C-f") 'helm-find-files)
 (global-set-key (kbd "C-c j") 'helm-occur)
 (global-set-key (kbd "C-c m") 'helm-grep-do-git-grep)
 
@@ -127,7 +126,7 @@
 (fset 'yes-or-no-p 'y-or-n-p)
 ;;; =============imenu=================
 (global-set-key  (kbd "C-c i") 'helm-semantic-or-imenu)
-(global-set-key (kbd "C-u") 'scroll-down-command) 
+;; (global-set-key (kbd "C-u") 'scroll-down-command) 
 ;; (require 'eide)
 ;; (eide-start)
 (global-set-key (kbd "M-k") 'qiang-copy-line)
@@ -185,34 +184,35 @@
 (add-hook 'org-babel-after-execute-hook 'bh/display-inline-images 'append)
                                         ; Make babel results blocks lowercase
 (setq org-babel-results-keyword "results")
-(org-babel-do-load-languages
- 'org-babel-load-languages
- '((emacs-lisp . t)
-    (dot . t)
-    (ditaa . t)
-    (R . t)
-    (python . t)
-    (ruby . t)
-    (gnuplot . t)
-    (clojure . t)
-    (sh . t)
-    (ledger . t)
-    (org . t)
-    (plantuml . t)
-    (latex . t)))
-(setq org-confirm-babel-evaluate nil)
+;; (org-babel-do-load-languages
+;;  'org-babel-load-languages
+;;  '((emacs-lisp . t)
+;;     (dot . t)
+;;     (ditaa . t)
+;;     (R . t)
+;;     (python . t)
+;;     (ruby . t)
+;;     (gnuplot . t)
+;;     (clojure . t)
+;;     (sh . t)
+;;     (ledger . t)
+;;     (org . t)
+;;     (plantuml . t)
+;;     (latex . t)))
+;; (setq org-confirm-babel-evaluate nil)
 ;; => always resize inline images to 300 pixels
 ;; (setq org-image-actual-width '(550))
 
 ;; => if there is a #+ATTR.*: width="200", resize to 200,
 ;; otherwise resize to 400
 (require 'org-alert)
-(setq org-alert-interval 2400)
+(setq org-alert-interval 7200)
 (setq org-alert-notification-title "TODO:")
 (org-alert-enable)
 
 (add-hook 'markdown-mode-hook 'iimage-mode)
 (add-hook 'org-mode-hook 'org-display-inline-images)
+(add-hook 'org-mode-hook 'outline-minor-mode)
 (setq org-startup-with-inline-images t)
 ;;; ===========================================================
 ;; iimage mode
@@ -370,8 +370,8 @@
 ;;; =================================================================
 ;;; yasnippet
 ;;; =================================================================
-(require 'yasnippet)
-(yas-global-mode 1)
+;; (require 'yasnippet)
+;; (yas-global-mode 1)
 ;; (add-hook 'auto-complete-mode-hook 'yas-minor-mode-on) 
 
 ;;; =================================================================
@@ -543,4 +543,7 @@
 
 
 
-(org-agenda-list)
+;; (org-agenda-list)
+;; (load-file "~/.emacs.d/myprelude/elpa/selectric-mode-20151201.718/selectric-mode.el")
+;; (require selectric-mode)
+;; (selectric-mode)

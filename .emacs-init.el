@@ -19,7 +19,7 @@
 ;; (add-to-list 'load-path "~/.emacs.d/prelude-back/core")
 ;; (add-to-list 'load-path "~/.emacs.d/prelude-back/modules")
 ;; (add-to-list 'load-path "~/.emacs.d/prelude-back/elpa")
-
+(setq prelude-theme 'solarized-light)
 (load-file "~/.emacs.d/myprelude/init.el")
 (setq prelude-flyspell nil)
 (require 'package)

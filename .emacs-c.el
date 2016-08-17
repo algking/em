@@ -55,7 +55,7 @@
                   "
                    /Library/Developer/CommandLineTools/usr/bin/../include/c++/v1
                    /usr/local/include
-                   /Library/Developer/CommandLineTools/usr/bin/../lib/clang/6.1.0/include
+                   /Library/Developer/CommandLineTools/usr/bin/../lib/clang/7.0.2/include
                    /Library/Developer/CommandLineTools/usr/include
                    /usr/include
                   "
@@ -75,12 +75,12 @@
                              (add-to-list 'company-backends 'company-c-headers)
                              (setq company-backends (delete 'company-semantic company-backends))))
 
-(split-string
- "
-                   /Library/Developer/CommandLineTools/usr/bin/../include/c++/v1
-                   /usr/local/include
-                   /Library/Developer/CommandLineTools/usr/bin/../lib/clang/6.1.0/include
-                   /Library/Developer/CommandLineTools/usr/include
-                   /usr/include
-                  "
- )
+;; (split-string
+;;  "
+;;                    /Library/Developer/CommandLineTools/usr/bin/../include/c++/v1
+;;                    /usr/local/include
+;;                    /Library/Developer/CommandLineTools/usr/bin/../lib/clang/7.0.2/include
+;;                    /Library/Developer/CommandLineTools/usr/include
+;;                    /usr/include
+;;                   "
+;;  )
