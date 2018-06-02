@@ -50,6 +50,12 @@
 (global-set-key (kbd "C-c j") 'helm-occur)
 (global-set-key (kbd "C-c m") 'helm-grep-do-git-grep)
 
+;;==============================================================
+;; ivy
+;;==============================================================
+;; (ivy-mode 1)
+;; (setq ivy-use-virtual-buffers t)
+;; (setq enable-recursive-minibuffers t)
 
 (global-set-key [f4] 'compile)
 (global-set-key (kbd "C-c 3") 'toggle-viper-mode)
@@ -91,15 +97,15 @@
 ;;==============================================================
 ;
 (defun my-clojure-config () 
-  (add-hook 'clojure-mode-hook 'cider-mode)
+  ;; (add-hook 'clojure-mode-hook 'cider-mode)
   ;; (add-hook 'cider-repl-mode-hook 'company-mode)
   ;; (add-hook 'cider-mode-hook 'company-mode)
   ;; (add-hook 'cider-repl-mode-hook 'paredit-mode)
-  (require 'ac-cider)
+  ;; (require 'ac-cider)
   ;; (add-hook 'cider-mode-hook 'ac-flyspell-workaround)
   ;; (add-hook 'cider-mode-hook 'ac-cider-setup)
-  (add-hook 'cider-repl-mode-hook 'ac-cider-setup)
-  (add-hook 'cider-repl-mode-hook 'smartparens-strict-mode)
+  ;; (add-hook 'cider-repl-mode-hook 'ac-cider-setup)
+  ;; (add-hook 'cider-repl-mode-hook 'smartparens-strict-mode)
   ;; (auto-plete-mode -1)
   )
 (eval-after-load "clojure-mode" '(my-clojure-config))
@@ -228,6 +234,11 @@
                                         ;(global-set-key (kbd "M-2") 'speedbar)
 
 ;; =============================================================
+;;  python-mode
+;; =============================================================
+(setenv "IPY_TEST_SIMPLE_PROMPT" "1")
+
+;; =============================================================
 ;;  auto-complete company-mode
 ;; =============================================================
 (dolist (hook '(scheme-mode-hook
@@ -246,7 +257,7 @@
 (add-hook 'c-mode-hook 'ac-cc-mode-setup)
 (add-hook 'c++-mode-hook 'ac-cc-mode-setup)
 (add-hook 'ruby-mode-hook 'ac-ruby-mode-setup)
-(add-hook 'css-mode-hook 'ac-css-mode-setup)
+;; (add-hook 'css-mode-hook 'ac-css-mode-setup)
 (add-hook 'objc-mode-hook 'ac-cc-mode-setup)
 (add-hook 'auto-complete-mode-hook 'ac-common-setup)
 ;; (global-auto-complete-mode nil)
@@ -260,7 +271,7 @@
                 web-mode-hook
                 objc-mode-hook
                 sgml-mode-hook
-                css-mode-hook
+                ;; css-mode-hook
                 ))
   (add-hook hook 'auto-complete-mode))
 (add-hook 'auto-complete-mode-hook '(lambda () (company-mode 0)))                
@@ -370,28 +381,64 @@
 ;;; =================================================================
 ;;; yasnippet
 ;;; =================================================================
-;; (require 'yasnippet)
-;; (yas-global-mode 1)
+(require 'yasnippet)
+(yas-global-mode 1)
 ;; (add-hook 'auto-complete-mode-hook 'yas-minor-mode-on) 
 
 ;;; =================================================================
 ;;; php
 ;;; =================================================================
 (global-set-key (kbd  "\C-ce" ) 'dash-at-point)
+(load-file "~/.emacs.d/plugin/php-doc.el")
+
+(defun php-block-comment (arg)
+  (interactive "*P")
+  (let ((comment-style 'extra-line)
+        (comment-start "/**")
+        (comment-end "*/"))
+    (comment-dwim arg)))
+
 (add-hook 'php-mode-hook
           (lambda ()
             ;; (add-to-list 'company-backends 'company-gtags)
             ;; (add-to-list 'company-backends 'company-yasnippet)
             ;; (require 'ac-php)
             ;; (setq ac-sources  '(ac-source-php ) )
-            ;; (define-key php-mode-map  (kbd "M-.") 'ac-php-find-symbol-at-point)   ;goto define
-            ;; (define-key php-mode-map  (kbd "M-,") 'ac-php-location-stack-back   ) 
+            ;; (require 'lsp-php)
+            (php-refactor-mode)
+            ;; (lsp-php-enable)
+            ;; (define-key php-mode-map  (kbd "M-.") 'xref-find-definitions)   ;goto define
+            ;; (define-key php-mode-map  (kbd "s-?") 'xref-find-references)
+            ;; (Define-key php-mode-map  (kbd "M-,") 'ac-php-location-stack-back   ) 
+            (define-key php-mode-map  (kbd "C-c C-c") 'php-block-comment) 
+
             (c-set-style "symfony2")
-            (ggtags-mode)
+            (ggtags-mode 1)
+            (semantic-mode 0)
             (eldoc-mode)
             ))
-(eval-after-load 'php-mode '(push '(company-gtags :with php-extras-company) company-backends))
+;; (eval-after-load 'php-mode '(push '(company-gtags :with php-extras-company) company-backends))
+;; (require 'company-lsp)
 
+(eval-after-load 'php-mode 
+  '(progn
+     ;; (require 'company-lsp)
+
+     (push '(company-gtags :with php-extras-company ) company-backends)
+     (global-set-key (kbd  "\C-ce" ) 'dash-at-point)
+     (load-file "~/.emacs.d/plugin/php-doc.el")
+     ;; (add-to-list 'load-path "~/.emacs.d/emacs-phan")
+     ;; (require 'phan)
+     ;; (load-file "~/.emacs.d/flycheck-phanclient/flycheck-phanclient.elc")
+     ;; (require 'flycheck-phanclient)
+     (;; custom-set-variables
+      ;; '(phpcbf-executable "~/.composer/vendor/bin/phpcbf")
+      ;; '(phpcbf-standard "PSR2")
+      )
+     ;; (push '(php-extras-company) company-backends)
+     ;; (push '(company-lsp) company-backends)
+     ))
+     
 ;;; =================================================================
 ;;; package-initialize
 ;;; =================================================================
@@ -539,7 +586,7 @@
 ;; (require 'emaXcode)
 ;; (add-to-list 'load-path "~/.emacs.d/emaXcode.el")
 `
-(load-file "~/.emacs.d/flycheck-objc.el")
+;; (load-file "~/.emacs.d/flycheck-objc.el")
 
 
 

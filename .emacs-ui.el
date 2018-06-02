@@ -33,11 +33,13 @@
 (setq default-process-coding-system '(utf-8 . utf-8))
 (setq-default pathname-coding-system 'utf-8)
 (set-file-name-coding-system 'utf-8)
-(prefer-coding-system 'utf-8)
+;; (prefer-coding-system 'utf-8)
+
+(set-coding-system-priority 'utf-8 'gbk) ;设置文件默认编码优先级
 
 ;;这两句是我的全局配置，避免出现多语言混乱。
-(set-language-environment 'UTF-8)
-(set-locale-environment "UTF-8")
+;; (set-language-environment 'UTF-8)
+;; (set-locale-environment "UTF-8")
 
 (eval-when-compile (require 'cl))
 
@@ -45,16 +47,18 @@
   (set-face-attribute 'default nil :font
                       (format "%s:pixelsize=%d" english english-size))
   (dolist (charset '(kana han symbol cjk-misc bopomofo))
-    (set-fontset-font (frame-parameter nil 'font) charset
-                      (font-spec :family chinese :size chinese-size))))
+     (set-fontset-font (frame-parameter nil 'font) charset
+                       (font-spec :family chinese :size chinese-size))
+    ))
 (set-font "Monaco" "YaHei Consolas Hybrid" 14 16)
 
 ;; (when (member "YaHei Consolas Hybrid" (font-family-list))
 ;;   (set-face-attribute 'default nil :font "YaHei Consolas Hybrid-12"))
 
-(require 'linum)
-(global-linum-mode t)
+;; (require 'linum)
+;; (global-linum-mode t)
 
+(global-display-line-numbers-mode t)
 ;; (global-nlinum-mode t)
 ;; Preset width nlinum
 ;; (add-hook 'nlinum-mode-hook

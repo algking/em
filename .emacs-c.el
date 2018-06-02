@@ -66,7 +66,7 @@
   (add-hook hook (lambda ()
                    (my-ac-cc-mode-setup)
                    (my-cc-clang-setup)
-                   (ggtags-mode)
+                   ;; (ggtags-mode)
                    (local-set-key (kbd "C-c h d") (lambda () (interactive)
                                                     (manual-entry (current-word)))))))
 ;; compnay-clang
