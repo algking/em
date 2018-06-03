@@ -344,6 +344,8 @@
                 (yas-minor-mode -1)
                 (add-to-list 'term-bind-key-alist '("M-[" . multi-term-prev))
                 (add-to-list 'term-bind-key-alist '("M-]" . multi-term-next))
+                (display-line-numbers-mode -1)
+                (linum-mode 1)
                 ))
 
 (define-key prelude-mode-map (kbd "C-c t") 'multi-term)
@@ -428,7 +430,6 @@
 (eval-after-load 'php-mode 
   '(progn
      ;; (require 'company-lsp)
-
      ;; (push '(company-gtags :with php-extras-company ) company-backends)
      (global-set-key (kbd  "\C-ce" ) 'dash-at-point)
      (load-file "~/.emacs.d/plugin/php-doc.el")
@@ -445,6 +446,7 @@
 
      (require 'company-php)
      (ac-php-core-eldoc-setup) ;; enable eldoc
+     (make-local-variable 'company-backends)
      (push 'company-ac-php-backend company-backends)
      (add-hook 'before-save-hook #'ac-php-remake-tags)
      ))
