@@ -47,7 +47,7 @@
 ;; helm
 ;;==============================================================
 ;; (global-set-key (kbd "C-x C-f") 'helm-find-files)
-(global-set-key (kbd "C-c j") 'helm-occur)
+;; (global-set-key (kbd "C-c j") 'helm-occur)
 (global-set-key (kbd "C-c m") 'helm-grep-do-git-grep)
 
 ;;==============================================================
@@ -131,7 +131,12 @@
 (global-set-key (kbd "C-c y") 'ido-switch-buffer)
 (fset 'yes-or-no-p 'y-or-n-p)
 ;;; =============imenu=================
-(global-set-key  (kbd "C-c i") 'helm-semantic-or-imenu)
+;; (global-set-key  (kbd "C-c i") 'helm-semantic-or-imenu)
+(global-set-key  (kbd "C-c I") '(lambda()
+                                  (interactive)
+                                  (setq imenu--index-alist nil)
+                                  (counsel-imenu)))
+
 ;; (global-set-key (kbd "C-u") 'scroll-down-command) 
 ;; (require 'eide)
 ;; (eide-start)
@@ -424,7 +429,7 @@
   '(progn
      ;; (require 'company-lsp)
 
-     (push '(company-gtags :with php-extras-company ) company-backends)
+     ;; (push '(company-gtags :with php-extras-company ) company-backends)
      (global-set-key (kbd  "\C-ce" ) 'dash-at-point)
      (load-file "~/.emacs.d/plugin/php-doc.el")
      ;; (add-to-list 'load-path "~/.emacs.d/emacs-phan")
@@ -437,6 +442,11 @@
       )
      ;; (push '(php-extras-company) company-backends)
      ;; (push '(company-lsp) company-backends)
+
+     (require 'company-php)
+     (ac-php-core-eldoc-setup) ;; enable eldoc
+     (push 'company-ac-php-backend company-backends)
+     (add-hook 'before-save-hook #'ac-php-remake-tags)
      ))
      
 ;;; =================================================================
