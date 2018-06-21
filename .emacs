@@ -16,7 +16,7 @@
 (semantic-mode 1)
 ;; (setq enable-recursive-minibuffers t)
 ;; (load-file "~/.emacs.d/plugin/xcscope/xcscope.el")
-;; (require 'xcscope)
+(require 'xcscope)
 
 
 ;;==============================================================
@@ -78,10 +78,10 @@
 ;;==============================================================
 ;;java 配置
 ;;==============================================================
-(add-to-list 'load-path "~/.emacs.d/plugin/jdee-2.4.1/lisp/")
-(autoload 'jde-mode "jde" "JDE mode" t)
-(setq auto-mode-alist
-      (append '(("\\.java\\'" . jde-mode)) auto-mode-alist))
+;; (add-to-list 'load-path "~/.emacs.d/plugin/jdee-2.4.1/lisp/")
+;; (autoload 'jde-mode "jde" "JDE mode" t)
+;; (setq auto-mode-alist
+;;       (append '(("\\.java\\'" . jde-mode)) auto-mode-alist))
 ;; ;; (autoload 'java-mode ".emacs-java.el" nil t )
 ;; ;; (add-hook 'java-mode-hook
 ;; ;;           '(lambda () 
@@ -345,7 +345,6 @@
                 (add-to-list 'term-bind-key-alist '("M-[" . multi-term-prev))
                 (add-to-list 'term-bind-key-alist '("M-]" . multi-term-next))
                 (display-line-numbers-mode -1)
-                (linum-mode 1)
                 ))
 
 (define-key prelude-mode-map (kbd "C-c t") 'multi-term)
@@ -409,23 +408,40 @@
           (lambda ()
             ;; (add-to-list 'company-backends 'company-gtags)
             ;; (add-to-list 'company-backends 'company-yasnippet)
-            ;; (require 'ac-php)
-            ;; (setq ac-sources  '(ac-source-php ) )
-            ;; (require 'lsp-php)
             (php-refactor-mode)
-            ;; (lsp-php-enable)
-            ;; (define-key php-mode-map  (kbd "M-.") 'xref-find-definitions)   ;goto define
-            ;; (define-key php-mode-map  (kbd "s-?") 'xref-find-references)
-            ;; (Define-key php-mode-map  (kbd "M-,") 'ac-php-location-stack-back   ) 
             (define-key php-mode-map  (kbd "C-c C-c") 'php-block-comment) 
-
             (c-set-style "symfony2")
-            (ggtags-mode 1)
             (semantic-mode 0)
             (eldoc-mode)
             ))
 ;; (eval-after-load 'php-mode '(push '(company-gtags :with php-extras-company) company-backends))
-;; (require 'company-lsp)
+(defun ac-php-enable ()
+         (add-hook 'php-mode-hook 
+            (lambda ()
+              (require 'company-php)
+              (ac-php-core-eldoc-setup) ;; enable eldoc
+              (define-key php-mode-map  (kbd "M-.") 'ac-php-find-symbol-at-point)   ;goto define
+              (define-key php-mode-map  (kbd "M-,") 'ac-php-location-stack-back)    ;go back
+              (make-local-variable 'company-backends)
+              (push '(company-ac-php-backend :with php-extras-company) company-backends))            ))
+
+(ac-php-enable)
+
+(defun mylsp-php-enable()
+  ;; (ggtags-mode 1)
+  (require 'company-lsp)
+  (require 'lsp-mode)
+  (require 'lsp-php)
+  (add-hook 'php-mode-hook #'lsp-php-enable)
+  (add-hook 'php-mode-hook 
+            (lambda ()
+              (define-key php-mode-map  (kbd "M-.") 'xref-find-definitions)   ;goto define
+              (define-key php-mode-map  (kbd "s-?") 'xref-find-references))))
+
+(defun remake-php-tags()
+  "重建ac-php-tags"
+  #'ac-php-remake-tags
+  )
 
 (eval-after-load 'php-mode 
   '(progn
@@ -441,17 +457,16 @@
       ;; '(phpcbf-executable "~/.composer/vendor/bin/phpcbf")
       ;; '(phpcbf-standard "PSR2")
       )
+     
      ;; (push '(php-extras-company) company-backends)
      ;; (push '(company-lsp) company-backends)
 
-     (require 'company-php)
-     (ac-php-core-eldoc-setup) ;; enable eldoc
-     (make-local-variable 'company-backends)
-     (push 'company-ac-php-backend company-backends)
-     (add-hook 'before-save-hook #'ac-php-remake-tags)
      ))
      
-;;; =================================================================
+(add-hook 'after-save-hook (lambda() (when (eq major-mode 'php-mode) 
+                                          (call-interactively 'ac-php-remake-tags)
+                                          )))
+
 ;;; package-initialize
 ;;; =================================================================
 ;;(package-initialize)
@@ -597,7 +612,6 @@
 ;; (load-file "~/.emacs.d/emaXcode.el")
 ;; (require 'emaXcode)
 ;; (add-to-list 'load-path "~/.emacs.d/emaXcode.el")
-`
 ;; (load-file "~/.emacs.d/flycheck-objc.el")
 
 
