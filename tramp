@@ -1,45 +1,6 @@
-;; -*- emacs-lisp -*- <16/04/08 13:03:35 /Users/algking/.emacs.d/tramp>
+;; -*- emacs-lisp -*- <20/11/11 12:02:06 /Users/algking/.emacs.d/tramp>
 ;; Tramp connection history.  Don't change this file.
-;; You can delete it, forcing Tramp to reapply the checks.
+;; Run `M-x tramp-cleanup-all-connections' instead.
 
-((["sudo" "root" "algkingdeMacBook-Pro.local" nil nil]
-  ("uname" "Darwin 13.3.0")
-  ("test" "test")
-  ("remote-path"
-   ("/usr/bin" "/bin" "/usr/sbin" "/sbin" "/usr/local/bin" "/opt/local/bin"))
-  ("remote-shell" "/bin/sh")
-  ("busybox" nil)
-  ("~root" "/var/root")
-  ("file-exists" "test -e")
-  ("stat" nil)
-  ("perl-file-spec" t)
-  ("perl-cwd-realpath" t)
-  ("perl" "\\perl5")
-  ("id" "/usr/bin/id")
-  ("gid-integer" 0)
-  ("readlink" nil)
-  ("uid-integer" 0))
- (["sudo" "root" "localhost" nil nil]
-  ("locale" "LC_ALL=C")
-  ("uname" "Darwin 14.5.0")
-  ("test" "test")
-  ("remote-path"
-   ("/usr/bin" "/bin" "/usr/sbin" "/sbin" "/usr/local/bin" "/usr/local/sbin" "/opt/local/bin"))
-  ("remote-shell" "/bin/sh")
-  ("readlink" nil)
-  ("perl-file-spec" t)
-  ("perl-cwd-realpath" t)
-  ("perl" "\\perl5")
-  ("stat" nil)
-  ("id" "/usr/bin/id")
-  ("gid-integer" 0)
-  ("file-exists" "test -e")
-  ("gid-string" "wheel")
-  ("uid-integer" 0)
-  ("gvfs-monitor-dir" nil)
-  ("inotifywait" nil)
-  ("ls" "/bin/ls")
-  ("bzr" "\\bzr")
-  ("git" "\\git")
-  ("hg" nil)
-  ("ls-dired" nil)))
+(((tramp-file-name "sudo" "root" nil "localhost" nil nil nil)
+  nil))
