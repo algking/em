@@ -23,6 +23,8 @@
 (load-file "~/.emacs.d/myprelude/init.el")
 (setq prelude-flyspell nil)
 (require 'package)
+(setq package-archives '(("gnu"   . "http://elpa.emacs-china.org/gnu/")
+                         ("melpa" . "http://elpa.emacs-china.org/melpa/")))
 ;; (add-to-list 'package-archives
 ;;              '("marmalade". "http://marmalade-repo.org/packages/") t)
 ;; (add-to-list 'package-archives

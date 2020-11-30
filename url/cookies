@@ -3,11 +3,15 @@
 
 (setq url-cookie-storage
  '((".baidu.com"
-  [url-cookie "PSTM" "1456457968" "31 Dec 37 23:55:55 [GMT]" "/" ".baidu.com" nil]
-  [url-cookie "BIDUPSID" "B0140AA2AF72AED511EAD6610A260030" "31 Dec 37 23:55:55 [GMT]" "/" ".baidu.com" nil]
-  [url-cookie "max-age" "2147483647" "31 Dec 37 23:55:55 [GMT]" "/" ".baidu.com" nil]
+  [url-cookie "BAIDUPSID" "B0140AA2AF72AED511EAD6610A260030" "31 Dec 37 23:55:55 [GMT]" "/" ".baidu.com" nil]
   [url-cookie "BAIDUID" "B0140AA2AF72AED511EAD6610A260030:FG=1" "31 Dec 37 23:55:55 [GMT]" "/" ".baidu.com" nil]
-  [url-cookie "BAIDUPSID" "B0140AA2AF72AED511EAD6610A260030" "31 Dec 37 23:55:55 [GMT]" "/" ".baidu.com" nil]))
+  [url-cookie "max-age" "2147483647" "31 Dec 37 23:55:55 [GMT]" "/" ".baidu.com" nil]
+  [url-cookie "BIDUPSID" "B0140AA2AF72AED511EAD6610A260030" "31 Dec 37 23:55:55 [GMT]" "/" ".baidu.com" nil]
+  [url-cookie "PSTM" "1456457968" "31 Dec 37 23:55:55 [GMT]" "/" ".baidu.com" nil])
+ (".taobao.com"
+  [url-cookie "t" "1400f8594c60318d7fa1a3557126b59c" "23-Jan-2017 15:42:11.00 GMT" "/" ".taobao.com" nil])
+ ("www.baidu.com"
+  [url-cookie "NOJS" "1" "11-Aug-2046 10:07:43.00 GMT" "/" "www.baidu.com" nil]))
 )
 (setq url-cookie-secure-storage
  'nil)

@@ -6,22 +6,22 @@
 
 
 (global-ede-mode t)
-(if (file-exists-p "/Users/algking/c-workspace/libevent/Makefile")
-    (ede-cpp-root-project "libevent"
-                          :name "libevent Config"
-                          :file "/Users/algking/c-workspace/libevent/Makefile"
-                          :system-include-path '("/usr/include")
-                          :include-path '(
-                                          "include"
-                                          "include/event2")))
+;; (if (file-exists-p "/Users/algking/c-workspace/libevent/Makefile")
+;;     (ede-cpp-root-project "libevent"
+;;                           :name "libevent Config"
+;;                          :file "/Users/algking/c-workspace/libevent/Makefile"
+;;                           :system-include-path '("/usr/include")
+;;                           :include-path '(
+;;                                           "include"
+;;                                           "include/event2")))
 
-(ede-cpp-root-project "mac-libc"
-                      :name "mac-libc"
-                      :file "/Users/algking/c-workspace/Libc-1044.1.2/Makefile"
-                      :system-include-path '("/Users/algking/c-workspace/Libc-1044.1.2/include")
-                      :include-path '(
-                                      "include"
-                                      ))
+;; (ede-cpp-root-project "mac-libc"
+;;                       :name "mac-libc"
+;;                       :file "/Users/algking/c-workspace/Libc-1044.1.2/Makefile"
+;;                       :system-include-path '("/Users/algking/c-workspace/Libc-1044.1.2/include")
+;;                       :include-path '(
+;;                                       "include"
+;;                                       ))
 
 (global-flycheck-mode)
 (defun check-and-add-header-path (checkpath)

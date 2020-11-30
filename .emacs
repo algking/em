@@ -3,6 +3,8 @@
 (load-file "~/.emacs.d/.emacs-init.el")
 (load-file "~/.emacs.d/.emacs-myfun.el")
 (load-file "~/.emacs.d/.emacs-c.el")
+(setenv "LC_CTYPE" "en_US.UTF-8")
+
 ;;==============================================================
 ;; Load CEDET semantic xcscope
 ;;==============================================================
@@ -13,11 +15,13 @@
 (add-to-list 'semantic-default-submodes 'global-semantic-mru-bookmark-mode t)
 (add-to-list 'semantic-default-submodes 'global-semantic-idle-completions-mode t)
 ;; ;; ;; ;; ;; Enable Semantic
-(semantic-mode 1)
+;; (semantic-mode 1)
 ;; (setq enable-recursive-minibuffers t)
 ;; (load-file "~/.emacs.d/plugin/xcscope/xcscope.el")
 (require 'xcscope)
 
+
+(define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
 
 ;;==============================================================
 ;; 自动备份
@@ -42,6 +46,7 @@
 (global-set-key (kbd "C-c SPC" ) 'easy-mark)
 (global-set-key (kbd "s-u" ) 'scroll-up-line)
 (global-set-key (kbd "s-d" ) 'scroll-down-line)
+(global-set-key (kbd "M-j") 'newline-and-indent)
 
 ;;==============================================================
 ;; helm
@@ -84,19 +89,40 @@
 ;;       (append '(("\\.java\\'" . jde-mode)) auto-mode-alist))
 ;; ;; (autoload 'java-mode ".emacs-java.el" nil t )
 ;; ;; (add-hook 'java-mode-hook
-;; ;;           '(lambda () 
+;; ;;           '(lambda ()
 ;; ;;              (semantic-add-system-include (getenv "JAVA_HOME") 'java-mode)))
 
 ;; (custom-set-variables ;; Инициализация переменных, указывающих, где
 ;;  '(cedet-java-jdk-root (getenv "JAVA_HOME"))
 ;;  '(semanticdb-javap-classpath '("/Library/Java/JavaVirtualMachines/jdk1.7.0_67.jdk/Contents/Home/jre/lib/rt.jar"))
 ;;  )
+(require 'meghanada)
+(add-hook 'java-mode-hook
+          (lambda ()
+            ;; meghanada-mode on
+            (meghanada-mode t)
+            (flycheck-mode +1)
+            (setq c-basic-offset 4)
+            ;; use code format
+            (add-hook 'before-save-hook 'meghanada-code-beautify-before-save)))
+(cond
+ ((eq system-type 'windows-nt)
+  (setq meghanada-java-path (expand-file-name "bin/java.exe" (getenv "JAVA_HOME")))
+  (setq meghanada-maven-path "mvn.cmd"))
+ (t
+  (setq meghanada-java-path "java")
+  (setq meghanada-maven-path "mvn")))
+
+
+(with-eval-after-load 'tls
+  (push "/usr/local/etc/libressl/cert.pem" gnutls-trustfiles))
+
 
 ;;==============================================================
 ;;clojure 配置
 ;;==============================================================
 ;
-(defun my-clojure-config () 
+(defun my-clojure-config ()
   ;; (add-hook 'clojure-mode-hook 'cider-mode)
   ;; (add-hook 'cider-repl-mode-hook 'company-mode)
   ;; (add-hook 'cider-mode-hook 'company-mode)
@@ -112,7 +138,7 @@
 
 
 ;;==============================================================
-;;flymake 
+;;flymake
 ;;==============================================================
 (custom-set-faces
  '(default ((t (:family "Ubuntu Mono" :foundry "unknown" :slant normal :weight normal :height 113 :width normal))))
@@ -124,7 +150,7 @@
 ;; (add-hook 'sh-mode-hook 'flymake-shell-load)
 
 ;;==============================================================
-;; mini-buffer buffer complete/switch window switch 
+;; mini-buffer buffer complete/switch window switch
 ;;==============================================================
 ;; (icomplete-mode 1)
 ;; (define-key minibuffer-local-completion-map (kbd "\t") 'minibuffer-complete-word)
@@ -137,7 +163,7 @@
                                   (setq imenu--index-alist nil)
                                   (counsel-imenu)))
 
-;; (global-set-key (kbd "C-u") 'scroll-down-command) 
+;; (global-set-key (kbd "C-u") 'scroll-down-command)
 ;; (require 'eide)
 ;; (eide-start)
 (global-set-key (kbd "M-k") 'qiang-copy-line)
@@ -153,7 +179,7 @@
  ;;           (lambda ()
  ;;             (require 'outline-cycle)))
 
-(eval-after-load "hideshow" '(progn 
+(eval-after-load "hideshow" '(progn
                                    (define-key hs-minor-mode-map (kbd "C-o C-b")	      'hs-hide-block)
                                    (define-key hs-minor-mode-map (kbd "C-o C-s")	      'hs-show-block)
                                    (define-key hs-minor-mode-map (kbd "C-o C-q")    'hs-hide-all)
@@ -242,14 +268,20 @@
 ;;  python-mode
 ;; =============================================================
 (setenv "IPY_TEST_SIMPLE_PROMPT" "1")
+(use-package elpy
+  :ensure t
+  :init
+  (elpy-enable))
 
 ;; =============================================================
 ;;  auto-complete company-mode
 ;; =============================================================
-(dolist (hook '(scheme-mode-hook
-               ))
+(dolist (hook '(scheme-mode-hook)
+              '(vue-mode-hook)
+              )
         (add-hook hook 'company-mode))
 (company-quickhelp-mode 1)
+(pos-tip-show "")
 (eval-after-load 'company '(progn (define-key company-mode-map (kbd "M-1") 'company-complete)))
 ;; (global-set-key (kbd "M-[") 'company-complete-common)
 ;; (global-set-key (kbd "M-1") 'company-manual-begin)
@@ -270,7 +302,7 @@
 (define-key ac-completing-map (kbd "\C-s")  'ac-isearch)
 
 (dolist (hook '(;; emacs-lisp-mode-hook
-                ;; c-mode-hook 
+                ;; c-mode-hook
                 ;; c++-mode-hook
                 ;; ruby-mode-hook
                 web-mode-hook
@@ -279,7 +311,7 @@
                 ;; css-mode-hook
                 ))
   (add-hook hook 'auto-complete-mode))
-(add-hook 'auto-complete-mode-hook '(lambda () (company-mode 0)))                
+;; (add-hook 'auto-complete-mode-hook '(lambda () (company-mode 0)))
 ;; =============================================================
 ;;  代码跳转
 ;; =============================================================
@@ -314,7 +346,9 @@
 (define-key yafolding-mode-map (kbd "C-c C-o") 'yafolding-toggle-element)
 (define-key yafolding-mode-map (kbd "C-c C-e") 'yafolding-hide-element)
 (add-hook 'prog-mode-hook 'yafolding-mode)
-          
+(add-hook 'vue-mode-hook 'yafolding-mode)
+
+
 
 ;; (dolist (hook (list 'html-mode-hook
 ;;                     'php-mode-hook
@@ -375,7 +409,7 @@
 ;; (add-hook 'gfm-mode-hook (lambda ()
 ;;                            (add-hook 'after-save-hook 'gh-md-render-buffer nil 'make-it-local)))
 ;;; ============================================================
-;;; org-mode 
+;;; org-mode
 ;;; ============================================================
 
 ;; (require 'dired-x)
@@ -389,7 +423,7 @@
 ;;; =================================================================
 (require 'yasnippet)
 (yas-global-mode 1)
-;; (add-hook 'auto-complete-mode-hook 'yas-minor-mode-on) 
+;; (add-hook 'auto-complete-mode-hook 'yas-minor-mode-on)
 
 ;;; =================================================================
 ;;; php
@@ -409,14 +443,14 @@
             ;; (add-to-list 'company-backends 'company-gtags)
             ;; (add-to-list 'company-backends 'company-yasnippet)
             (php-refactor-mode)
-            (define-key php-mode-map  (kbd "C-c C-c") 'php-block-comment) 
+            (define-key php-mode-map  (kbd "C-c C-c") 'php-block-comment)
             (c-set-style "symfony2")
             (semantic-mode 0)
             (eldoc-mode)
             ))
 ;; (eval-after-load 'php-mode '(push '(company-gtags :with php-extras-company) company-backends))
 (defun ac-php-enable ()
-         (add-hook 'php-mode-hook 
+         (add-hook 'php-mode-hook
             (lambda ()
               (require 'company-php)
               (ac-php-core-eldoc-setup) ;; enable eldoc
@@ -433,7 +467,7 @@
   (require 'lsp-mode)
   (require 'lsp-php)
   (add-hook 'php-mode-hook #'lsp-php-enable)
-  (add-hook 'php-mode-hook 
+  (add-hook 'php-mode-hook
             (lambda ()
               (define-key php-mode-map  (kbd "M-.") 'xref-find-definitions)   ;goto define
               (define-key php-mode-map  (kbd "s-?") 'xref-find-references))))
@@ -443,7 +477,7 @@
   #'ac-php-remake-tags
   )
 
-(eval-after-load 'php-mode 
+(eval-after-load 'php-mode
   '(progn
      ;; (require 'company-lsp)
      ;; (push '(company-gtags :with php-extras-company ) company-backends)
@@ -457,15 +491,23 @@
       ;; '(phpcbf-executable "~/.composer/vendor/bin/phpcbf")
       ;; '(phpcbf-standard "PSR2")
       )
-     
+
      ;; (push '(php-extras-company) company-backends)
      ;; (push '(company-lsp) company-backends)
 
      ))
-     
-(add-hook 'after-save-hook (lambda() (when (eq major-mode 'php-mode) 
-                                          (call-interactively 'ac-php-remake-tags)
-                                          )))
+
+(add-hook 'after-save-hook (lambda()
+                             (when (eq major-mode 'php-mode)
+                               ;; (call-interactively 'ac-php-remake-tags)
+                               )))
+
+;; (add-hook 'before-save-hook (lambda()
+;;                               (goto-char 0)
+;;                               (while (search-forward "\r" nil :noerror)
+;;                                 (replace-match "")
+;;                                 )))
+
 
 ;;; package-initialize
 ;;; =================================================================
@@ -479,10 +521,58 @@
 ;;  '( magit rainbow-mode dash deft))
 (load-file "~/.emacs.d/.emacs-ui.el")
 
+;; Call Gofmt before saving
+;; (setq gofmt-command "goimports")
+;; (add-hook 'before-save-hook 'gofmt-before-save)
+;; ;;autocomplete
+;; (eval-after-load 'go-mode
+;;   '(progn
+;;      (set (make-local-variable 'company-backends) '(company-go)))
+;;   ;; (add-to-list 'company-backends 'company-go)
+;;   )
+
+;; Godef jump key binding
+(local-set-key (kbd "M-.") 'godef-jump)
+(local-set-key (kbd "M-,") 'pop-tag-mark)
+(add-hook 'go-mode-hook
+          (lambda ()
+            (define-key go-mode-map (kbd "M-.") 'godef-jump)
+            (define-key go-mode-map (kbd "M-,") 'pop-tag-mark)))
+
+(use-package go-mode
+  :ensure t
+  :mode (("\\.go\\'" . go-mode))
+  :hook ((before-save . gofmt-before-save))
+  :config
+  (setq gofmt-command "goimports")
+  (use-package company-go
+    :ensure t
+    :config
+    (add-hook 'go-mode-hook (lambda()
+                              (add-to-list (make-local-variable 'company-backends)
+                                           '(company-go company-yasnippet))))
+    )
+  (use-package go-eldoc
+    :ensure t
+    :hook (go-mode . go-eldoc-setup)
+    )
+  (use-package go-guru
+    :ensure t
+    :hook (go-mode . go-guru-hl-identifier-mode)
+    )
+  (use-package go-rename
+    :ensure t)
+  )
 
 ;;; ==============javascript mode 设置 ===============
 ;; (add-to-list 'load-path "~/.emacs.d/plugin/tern/emacs/")
 ;; (autoload 'tern-mode "tern.el" nil t)
+(setq js2-strict-missing-semi-warning nil)
+(setq js2-missing-semi-one-line-override nil)
+(setq-default flycheck-disabled-checkers
+              (append flycheck-disabled-checkers
+                      '(lsp-ui)
+                      '(javascript-jshint)))
 (eval-after-load 'tern
   '(progn
      (add-to-list 'company-backends 'company-tern)
@@ -491,7 +581,9 @@
      ))
 
 ;; (add-hook 'js2-mode-hook (lambda () (tern-mode t)))
-(add-hook 'js-mode-hook (lambda () (tern-mode t)))
+(add-hook 'js-mode-hook (lambda ()
+                          (flycheck-select-checker 'javascript-eslint)
+                          (tern-mode t)))
 ;; (require 'js2-refactor)
 ;; (add-hook 'js2-mode-hook #'js2-refactor-mode)
 ;; (js2r-add-keybindings-with-prefix "C-c C-m")
@@ -506,7 +598,7 @@
 (add-hook 'css-mode-hook 'rainbow-mode)
 (add-hook 'web-mode-hook 'rainbow-mode)
 (add-hook 'css-mode-hook 'auto-complete-mode)
-(add-hook 'html-mode-hook 'skewer-html-mode)
+;; (add-hook 'html-mode-hook 'skewer-html-mode)
 (add-hook 'html-mode-hook 'auto-complete-mode)
 (add-hook 'html-mode-hook 'rainbow-mode)
 
@@ -519,31 +611,137 @@
 
 (eval-after-load 'js2-mode
   '(progn
-     (define-key js2-mode-map (kbd "C-c C-n") 'nodejs-repl)                              
+     (define-key js2-mode-map (kbd "C-c C-n") 'nodejs-repl)
      ))
 (setq ac-js2-evaluate-calls nil)
 
-;; emmet 
+(defun my/web-vue-setup()
+  "Setup for js related."
+  (message "web-mode use vue related setup")
+  ;; (setup-tide-mode)
+  ;; (prettier-js-mode)
+  (flycheck-add-mode 'javascript-eslint 'web-mode)
+  (flycheck-select-checker 'javascript-eslint)
+  (setq web-mode-enable-auto-indentation nil)
+  ;; (my/use-eslint-from-node-modules)
+  ;; (add-to-list (make-local-variable 'company-backends)
+  ;;              '(comany-tide company-web-html company-css company-files))
+  )
+
+(use-package web-mode
+  :ensure t
+  :mode ("\\.html\\'" "\\.vue\\'" "\\.asp\\'")
+  :config
+  (setq web-mode-markup-indent-offset 2)
+  (setq web-mode-css-indent-offset 2)
+  (setq web-mode-code-indent-offset 2)
+  (setq web-mode-enable-current-element-highlight t)
+  ;; (setq web-mode-enable-css-colorization t)
+  ;; (set-face-attribute 'web-mode-html-tag-face nil :foreground "royalblue")
+  ;; (set-face-attribute 'web-mode-html-attr-name-face nil :foreground "powderblue")
+  ;; (set-face-attribute 'web-mode-doctype-face nil :foreground "lightskyblue")
+  (setq web-mode-content-types-alist
+        '(("vue" . "\\.vue\\'")))
+  (use-package company-web
+    :ensure t)
+  (add-hook 'web-mode-hook (lambda()
+                             (cond ((equal web-mode-content-type "html")
+                                    (my/web-html-setup))
+                                   ((member web-mode-content-type '("vue"))
+                                    (my/web-vue-setup))
+                                   )))
+  )
+
+;; ------------------------------------------------
+;; vue lsp config mmm-mode
+;; ------------------------------------------------
+;; (add-hook 'js2-mode-hook #'lsp-mode)
+;; (add-hook 'vue-mode-hook #'lsp-mode)
+;; (require 'lsp-vue)
+;; ;; (add-hook 'programming-mode-hook 'lsp-mode)
+(add-to-list 'auto-mode-alist '("\\.vue\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.wxml\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.wxss\\'" . web-mode))
+;; (add-hook 'vue-mode-hook #'lsp-vue-enable)
+;; (add-hook 'vue-mode-hook #'lsp-vue-mmm-enable)
+;; (eval-after-load 'lsp-vue
+;;   '(progn
+;;      (setq lsp-ui-flycheck-enable t)
+;;      (add-to-list 'company-backends 'company-lsp)
+;;   ;; (push '(company-lsp) company-backends)
+;;      )
+;; )
+
+;; (require 'lsp)
+;; (require 'lsp-clients)
+;; (add-hook 'js-mode-hook #'lsp)
+;; (add-hook 'vue-mode-hook #'lsp)
+
+;; (require 'lsp-vue)
+
+;; (add-hook 'programming-mode-hook 'lsp)
+;; (add-hook 'vue-mode-hook #'lsp-vue-mmm-enable)
+;; (eval-after-load 'lsp-vue
+;;   '(progn
+;;           (setq lsp-ui-flycheck-enable t)))
+
+;; (setq lsp-prefer-flymake nil)
+;; (setq lsp-ui-sideline-enable nil
+;;       lsp-ui-doc-enable nil
+;;       lsp-ui-sideline-show-flycheck nil
+;;       lsp-ui-imenu-enable t
+;;       lsp-ui-sideline-ignore-duplicate t)
+;; (require 'company-web-html)
+
+
+(setq mmm-vue-html-mode-exit-hook (lambda ()
+                                (message "Run when leaving vue-html mode")
+                                (tagedit-mode -1)
+                                (emmet-mode -1)))
+(setq mmm-vue-html-mode-enter-hook (lambda ()
+                                (message "Run when entering vue-html mode")
+                                (tagedit-mode 1)
+                                (emmet-mode 1)))
+(setq mmm-js-mode-exit-hook (lambda ()
+                              (message "Run when leaving js mode")
+                              (tern-mode -1)
+                              (tagedit-mode -1)
+                              (emmet-mode -1)))
+(setq mmm-js-mode-enter-hook (lambda ()
+                               (message "Run when entering js mode")
+                               ;; fix emacs 26.3 indent bug
+                               (setq syntax-ppss-table nil)
+                               (auto-complete-mode -1)
+                               ;; (tern-mode t)
+                               ))
+
+(setq mmm-typescript-mode-enter-hook (lambda () (setq syntax-ppss-table nil)))
+;;------------------------------------------------
+;; emmet
+;;------------------------------------------------
 (add-hook 'sgml-mode-hook 'ac-emmet-html-setup)
-(add-hook 'css-mode-hook 'ac-emmet-css-setup)
 (add-hook 'sgml-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
-(add-hook 'css-mode-hook  'emmet-mode) ;; enable Emmet's css abbreviation.
+;; (add-hook 'html-mode-hook 'emmet-mode)
+;; (add-hook 'html-mode-hook 'ac-emmet-html-setup)
+(add-hook 'css-mode-hook  'emmet-mode)
+(add-hook 'css-mode-hook 'ac-emmet-css-setup)
 (add-hook 'web-mode-hook 'emmet-mode)
 (add-hook 'web-mode-hook 'ac-emmet-html-setup)
+(add-hook 'vue-html-mode 'emmet-mode)
+(add-hook 'vue-html-mode 'ac-emmet-html-setup)
+
 ;; (global-set-key (kbd "M-j" ) 'emmet-expand-line)
-(add-hook 'emmet-mode-hook 
-(lambda ()
-  (define-key emmet-mode-keymap (kbd "M-j") 'emmet-expand-line)
-  (define-key emmet-mode-keymap (kbd "C-j") 'newline-and-indent)
-)
-)
+(add-hook 'emmet-mode-hook
+          (lambda ()
+            ;; (define-key emmet-mode-keymap (kbd "C-return") 'emmet-expand-line)
+            (define-key emmet-mode-keymap (kbd "C-j") 'newline-and-indent)))
 
 (eval-after-load "sgml-mode"
   '(progn
      (require 'tagedit)
      (tagedit-add-paredit-like-keybindings)
      (add-hook 'html-mode-hook (lambda () (tagedit-mode 1)))))
-
+ 
 (eval-after-load 'javascript-mode
   '(define-key javascript-mode-map (kbd "C-c b") 'web-beautify-js))
 
