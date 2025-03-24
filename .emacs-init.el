@@ -1,6 +1,5 @@
-
 ;;==============================================================
-;;el-get 
+;;el-get
 ;;==============================================================
 ;; (add-to-list 'load-path "~/.emacs.d/el-get/el-get")
 ;; (unless (require 'el-get nil 'noerror)
@@ -14,21 +13,30 @@
 ;; (el-get 'sync)
 
 ;;==============================================================
-;;prelude 
+;;prelude
 ;;==============================================================
 ;; (add-to-list 'load-path "~/.emacs.d/prelude-back/core")
 ;; (add-to-list 'load-path "~/.emacs.d/prelude-back/modules")
 ;; (add-to-list 'load-path "~/.emacs.d/prelude-back/elpa")
-(setq prelude-theme 'solarized-light)
-(load-file "~/.emacs.d/myprelude/init.el")
-(setq prelude-flyspell nil)
 (require 'package)
-(setq package-archives '(("gnu"   . "http://elpa.emacs-china.org/gnu/")
-                         ("melpa" . "http://elpa.emacs-china.org/melpa/")))
+;; (setq package-archives '(("gnu"   . "http://1.15.88.122/gnu/")
+;;                          ("melpa" . "http://1.15.88.122/melpa/")))
+;; (setq package-archives '(("gnu"   . "http://elpa.zilongshanren.com/gnu/")
+;;                          ("melpa" . "http://elpa.zilongshanren.com/melpa/")))
+(setq package-archives '(("gnu"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
+                         ("melpa" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")))
+;; ("melpa" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/stable-melpa/")
+
+;; (setq package-archives '(("gnu"   . "http://elpa.emacs-china.org/gnu/")
+;;                          ("melpa" . "http://elpa.emacs-china.org/melpa/")))
 ;; (add-to-list 'package-archives
 ;;              '("marmalade". "http://marmalade-repo.org/packages/") t)
 ;; (add-to-list 'package-archives
 ;; '("melpa-stable" . "http://melpa-stable.milkbox.net/packages/") t)
+(setq prelude-theme 'solarized-light)
+(load-file "~/.emacs.d/myprelude/init.el")
+
+(setq prelude-flyspell nil)
 
 (prelude-require-packages
  '(
@@ -42,7 +50,7 @@
    cl-lib
    dash
    deft
-   dired+
+   ;; dired+
    edit-server
    etags-select
    find-file-in-project
@@ -64,7 +72,7 @@
    ignoramus
    imenu-anywhere
    inf-ruby
-   isearch+
+   ;; isearch+
    php-mode
    skewer-mode
    js2-mode
@@ -92,7 +100,7 @@
    ;; popup
    ;; popwin
    ;; psvn
-   session
+   ;; session
    ;; shell-pop
    ;; skewer-mode
    ;; skewer-mode

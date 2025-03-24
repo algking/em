@@ -1,3 +1,15 @@
+;;; .emacs-ui.el --- ui
+;; Copyright (C) 1998, 2000-2020 Free Software Foundation, Inc.
+
+;; Author: Dave Love <fx@gnu.org>
+;; Maintainer: emacs-devel@gnu.org
+;; Created: 1998-09-13
+;; Keywords: faces, frames, emulations
+
+;; This file is part of GNU Emacs.
+;;; Commentary:
+
+;;
 ;;==============================================================
 ;; mini-buffer buffer complete/switch window switch 启动UI
 ;;==============================================================
@@ -41,7 +53,7 @@
 ;; (set-language-environment 'UTF-8)
 ;; (set-locale-environment "UTF-8")
 
-(eval-when-compile (require 'cl))
+;; (eval-when-compile (require 'cl))
 
 (defun set-font (english chinese english-size chinese-size)
   (set-face-attribute 'default nil :font
@@ -50,7 +62,8 @@
      (set-fontset-font (frame-parameter nil 'font) charset
                        (font-spec :family chinese :size chinese-size))
     ))
-(set-font "Monaco" "YaHei Consolas Hybrid" 14 16)
+
+'(set-font "Monaco" "YaHei Consolas Hybrid" 14 16)
 
 ;; (when (member "YaHei Consolas Hybrid" (font-family-list))
 ;;   (set-face-attribute 'default nil :font "YaHei Consolas Hybrid-12"))
@@ -67,3 +80,4 @@
 ;;                   (length (number-to-string
 ;;                            (count-lines (point-min) (point-max)))))))
 (global-hl-line-mode)
+;;;

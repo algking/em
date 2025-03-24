@@ -3,6 +3,7 @@
 (load-file "~/.emacs.d/.emacs-init.el")
 (load-file "~/.emacs.d/.emacs-myfun.el")
 (load-file "~/.emacs.d/.emacs-c.el")
+(load-file "~/.emacs.d/.emacs-ui.el")
 (setenv "LC_CTYPE" "en_US.UTF-8")
 
 ;;==============================================================
@@ -79,43 +80,6 @@
 ;; (add-to-list 'load-path "~/.emacs.d")
 (autoload 'erlang-mode "~/.emacs.d/.emacs-erlang.el" nil t)
 
-
-;;==============================================================
-;;java 配置
-;;==============================================================
-;; (add-to-list 'load-path "~/.emacs.d/plugin/jdee-2.4.1/lisp/")
-;; (autoload 'jde-mode "jde" "JDE mode" t)
-;; (setq auto-mode-alist
-;;       (append '(("\\.java\\'" . jde-mode)) auto-mode-alist))
-;; ;; (autoload 'java-mode ".emacs-java.el" nil t )
-;; ;; (add-hook 'java-mode-hook
-;; ;;           '(lambda ()
-;; ;;              (semantic-add-system-include (getenv "JAVA_HOME") 'java-mode)))
-
-;; (custom-set-variables ;; Инициализация переменных, указывающих, где
-;;  '(cedet-java-jdk-root (getenv "JAVA_HOME"))
-;;  '(semanticdb-javap-classpath '("/Library/Java/JavaVirtualMachines/jdk1.7.0_67.jdk/Contents/Home/jre/lib/rt.jar"))
-;;  )
-(require 'meghanada)
-(add-hook 'java-mode-hook
-          (lambda ()
-            ;; meghanada-mode on
-            (meghanada-mode t)
-            (flycheck-mode +1)
-            (setq c-basic-offset 4)
-            ;; use code format
-            (add-hook 'before-save-hook 'meghanada-code-beautify-before-save)))
-(cond
- ((eq system-type 'windows-nt)
-  (setq meghanada-java-path (expand-file-name "bin/java.exe" (getenv "JAVA_HOME")))
-  (setq meghanada-maven-path "mvn.cmd"))
- (t
-  (setq meghanada-java-path "java")
-  (setq meghanada-maven-path "mvn")))
-
-
-(with-eval-after-load 'tls
-  (push "/usr/local/etc/libressl/cert.pem" gnutls-trustfiles))
 
 
 ;;==============================================================
@@ -454,23 +418,39 @@
             (lambda ()
               (require 'company-php)
               (ac-php-core-eldoc-setup) ;; enable eldoc
-              (define-key php-mode-map  (kbd "M-.") 'ac-php-find-symbol-at-point)   ;goto define
-              (define-key php-mode-map  (kbd "M-,") 'ac-php-location-stack-back)    ;go back
+              ;; (define-key php-mode-map  (kbd "M-.") 'ac-php-find-symbol-at-point)   ;goto define
+              ;; (define-key php-mode-map  (kbd "M-,") 'ac-php-location-stack-back)    ;go back
               (make-local-variable 'company-backends)
               (push '(company-ac-php-backend :with php-extras-company) company-backends))            ))
 
 (ac-php-enable)
+;; 默认映射开启 treesit-php 模式
+(push '(php-mode . php-ts-mode) major-mode-remap-alist)
+(add-hook 'php-mode-hook #'(lambda () (treesit-parser-create 'php)))
+
+;; (lsp-defcustom lsp-intelephense-include-paths
+;;   [ "../framework/components" "../framework/localpackages" "../framework/vendor/yiisoft"]
+;;   "Configure glob patterns to include certain files and folders
+;; from all language server features."
+;;   :type 'lsp-string-vector
+;;   :type '(repeat string)
+;;   :group 'lsp-intelephense
+;;   :package-version '(lsp-mode . "6.1")
+;;   :lsp-path "intelephense.environment.includePaths")
 
 (defun mylsp-php-enable()
   ;; (ggtags-mode 1)
-  (require 'company-lsp)
+  ;; (require 'company-lsp)
   (require 'lsp-mode)
-  (require 'lsp-php)
-  (add-hook 'php-mode-hook #'lsp-php-enable)
+  ;; (require 'lsp-php)
+  ;; (add-hook 'php-mode-hook #'lsp-php-enable)
   (add-hook 'php-mode-hook
             (lambda ()
-              (define-key php-mode-map  (kbd "M-.") 'xref-find-definitions)   ;goto define
+              (lsp-mode)
+              ;; (define-key php-mode-map  (kbd "M-.") 'xref-find-definitions)   ;goto define
               (define-key php-mode-map  (kbd "s-?") 'xref-find-references))))
+
+(mylsp-php-enable)
 
 (defun remake-php-tags()
   "重建ac-php-tags"
@@ -509,6 +489,13 @@
 ;;                                 )))
 
 
+(defun delete-carrage-returns ()
+  (interactive)
+  (save-excursion
+    (goto-char 0)
+    (while (search-forward "\r" nil :noerror)
+      (replace-match ""))))
+
 ;;; package-initialize
 ;;; =================================================================
 ;;(package-initialize)
@@ -519,7 +506,6 @@
 ;;        (if (y-or-n-p (format "Package %s is missing. Install it? " package))
 ;;            (package-install package))))
 ;;  '( magit rainbow-mode dash deft))
-(load-file "~/.emacs.d/.emacs-ui.el")
 
 ;; Call Gofmt before saving
 ;; (setq gofmt-command "goimports")
@@ -530,39 +516,101 @@
 ;;      (set (make-local-variable 'company-backends) '(company-go)))
 ;;   ;; (add-to-list 'company-backends 'company-go)
 ;;   )
-
+;; ==================== go mode 设置 ===================
 ;; Godef jump key binding
-(local-set-key (kbd "M-.") 'godef-jump)
-(local-set-key (kbd "M-,") 'pop-tag-mark)
-(add-hook 'go-mode-hook
-          (lambda ()
-            (define-key go-mode-map (kbd "M-.") 'godef-jump)
-            (define-key go-mode-map (kbd "M-,") 'pop-tag-mark)))
+;; (local-set-key (kbd "M-.") 'godef-jump)
+;; (local-set-key (kbd "M-,") 'pop-tag-mark)
+;; (add-hook 'go-mode-hook
+;;           (lambda ()
+;;             (define-key go-mode-map (kbd "M-.") 'godef-jump)
+;;             (define-key go-mode-map (kbd "M-,") 'pop-tag-mark)))
+(setq read-process-output-max (* 32 1024 1024)) ;; 1mb
 
 (use-package go-mode
   :ensure t
   :mode (("\\.go\\'" . go-mode))
-  :hook ((before-save . gofmt-before-save))
+  ;; :hook ((before-save . gofmt-before-save))
+  :defer t
   :config
-  (setq gofmt-command "goimports")
-  (use-package company-go
-    :ensure t
+  ;; (setq gofmt-command "goimports")
+  (setq lsp-prefer-flymake nil)
+
+  
+  ;; (after! (:and lsp-mode flycheck)
+  ;;         (flycheck-add-next-checker 'lsp 'go-golint))
+  
+
+  (use-package lsp-mode
+    ;; :ensure t
+    :defer t
+    :commands (lsp lsp-deferred)
+    :hook (go-mode . lsp-deferred)
     :config
-    (add-hook 'go-mode-hook (lambda()
-                              (add-to-list (make-local-variable 'company-backends)
-                                           '(company-go company-yasnippet))))
+
+    ;; Set up before-save hooks to format buffer and add/delete imports.
+    ;; Make sure you don't have other gofmt/goimports hooks enabled.
+    (defun lsp-go-install-save-hooks ()
+      (add-hook 'before-save-hook #'lsp-format-buffer t t)
+      (add-hook 'before-save-hook #'lsp-organize-imports t t))
+
+    (add-hook 'go-mode-hook #'lsp-go-install-save-hooks)
+    (add-hook 'go-mode-hook #'go-ts-mode)
+    ;; go-impl go-test
+    (add-hook 'go-mode-hook
+              (lambda ()
+                (define-key go-mode-map (kbd "C-c C-t") 'go-test-current-test)
+                ;; (define-key go-mode-map (kbd "M-.") 'godef-jump)
+                (define-key go-mode-map  (kbd "M-.") 'xref-find-definitions)
+                (define-key go-mode-map (kbd "C-c C-b") 'go-test-current-benchmark)
+                (define-key go-mode-map (kbd "C-c T") 'go-gen-test-dwim)
+                (define-key go-mode-map (kbd "C-c C-l") 'go-run)
+                (define-key go-mode-map (kbd "C-c I") 'go-impl)))
+
+    (lsp-register-custom-settings
+     '(("gopls.completeUnimported" t t)
+       ("gopls.staticcheck" t t)
+       ;; ("gopls.env" (GOOS=linux GOARCH=amd64))
+       ))
+
+    ;; (eval-after-load 'flycheck
+    ;;   '(add-hook 'flycheck-mode-hook (lambda () (flycheck-add-next-checker 'lsp '(warning . go-golint)))))
+
+    (use-package flycheck
+      :ensure t
+      :defer t
+      :after lsp-mode
+      :config
+      ;; (add-hook 'flycheck-mode-hook (lambda () (flycheck-add-next-checker 'lsp '(warning . go-golint))))
+      )
     )
-  (use-package go-eldoc
-    :ensure t
-    :hook (go-mode . go-eldoc-setup)
-    )
-  (use-package go-guru
-    :ensure t
-    :hook (go-mode . go-guru-hl-identifier-mode)
-    )
-  (use-package go-rename
-    :ensure t)
+
+  
+  ;; (use-package company-go
+  ;;   :ensure t
+  ;;   :config
+  ;;   (add-hook 'go-mode-hook (lambda()
+  ;;                             (add-to-list (make-local-variable 'company-backends)
+  ;;                                          '(company-go company-yasnippet))))
+  ;;   )
+  ;; (use-package go-eldoc
+  ;;   :ensure t
+  ;;   :hook (go-mode . go-eldoc-setup)
+  ;;   )
+  ;; (use-package go-guru
+  ;;   :ensure t
+  ;;   :hook (go-mode . go-guru-hl-identifier-mode)
+  ;;   )
+  ;; (use-package go-rename
+  ;;   :ensure t)
   )
+
+;; Optional - provides fancier overlays.
+;; (use-package lsp-ui
+;;   :ensure t
+;;   :commands lsp-ui-mode)
+
+
+
 
 ;;; ==============javascript mode 设置 ===============
 ;; (add-to-list 'load-path "~/.emacs.d/plugin/tern/emacs/")
@@ -581,8 +629,9 @@
      ))
 
 ;; (add-hook 'js2-mode-hook (lambda () (tern-mode t)))
-(add-hook 'js-mode-hook (lambda ()
-                          (flycheck-select-checker 'javascript-eslint)
+(add-hook 'typescript-mode-hook (lambda () (tern-mode t)))
+(add-hook 'js2-mode-hook (lambda ()
+                          ;; (flycheck-select-checker 'javascript-eslint)
                           (tern-mode t)))
 ;; (require 'js2-refactor)
 ;; (add-hook 'js2-mode-hook #'js2-refactor-mode)
@@ -597,6 +646,7 @@
 (add-hook 'css-mode-hook 'skewer-css-mode)
 (add-hook 'css-mode-hook 'rainbow-mode)
 (add-hook 'web-mode-hook 'rainbow-mode)
+(add-hook 'web-mode-hook 'auto-highlight-symbol)
 (add-hook 'css-mode-hook 'auto-complete-mode)
 ;; (add-hook 'html-mode-hook 'skewer-html-mode)
 (add-hook 'html-mode-hook 'auto-complete-mode)
@@ -615,18 +665,12 @@
      ))
 (setq ac-js2-evaluate-calls nil)
 
-(defun my/web-vue-setup()
-  "Setup for js related."
-  (message "web-mode use vue related setup")
-  ;; (setup-tide-mode)
-  ;; (prettier-js-mode)
-  (flycheck-add-mode 'javascript-eslint 'web-mode)
-  (flycheck-select-checker 'javascript-eslint)
-  (setq web-mode-enable-auto-indentation nil)
-  ;; (my/use-eslint-from-node-modules)
-  ;; (add-to-list (make-local-variable 'company-backends)
-  ;;              '(comany-tide company-web-html company-css company-files))
-  )
+;; (defun my/web-vue-setup
+;;     ;; (my/use-eslint-from-node-modules)
+;;     ;; (add-to-list (make-local-variable 'company-backends)
+;;     ;; (set-face-background 'mmm-default-submode-face nil)
+;;     ;; '(comany-tide company-web-html company-css company-files))
+;;   )
 
 (use-package web-mode
   :ensure t
@@ -647,8 +691,8 @@
   (add-hook 'web-mode-hook (lambda()
                              (cond ((equal web-mode-content-type "html")
                                     (my/web-html-setup))
-                                   ((member web-mode-content-type '("vue"))
-                                    (my/web-vue-setup))
+                                   ;; ((member web-mode-content-type '("vue"))
+                                   ;;  (my/web-vue-setup))
                                    )))
   )
 
@@ -700,6 +744,7 @@
                                 (emmet-mode -1)))
 (setq mmm-vue-html-mode-enter-hook (lambda ()
                                 (message "Run when entering vue-html mode")
+                                ;; (set-face-background 'mmm-default-submode-face nil)
                                 (tagedit-mode 1)
                                 (emmet-mode 1)))
 (setq mmm-js-mode-exit-hook (lambda ()
@@ -818,3 +863,88 @@
 ;; (load-file "~/.emacs.d/myprelude/elpa/selectric-mode-20151201.718/selectric-mode.el")
 ;; (require selectric-mode)
 ;; (selectric-mode)
+
+;;==============================================================
+;;java 配置
+;;==============================================================
+;; (add-to-list 'load-path "~/.emacs.d/plugin/jdee-2.4.1/lisp/")
+;; (autoload 'jde-mode "jde" "JDE mode" t)
+;; (setq auto-mode-alist
+;;       (append '(("\\.java\\'" . jde-mode)) auto-mode-alist))
+;; ;; (autoload 'java-mode ".emacs-java.el" nil t )
+;; ;; (add-hook 'java-mode-hook
+;; ;;           '(lambda ()
+;; ;;              (semantic-add-system-include (getenv "JAVA_HOME") 'java-mode)))
+
+;; (custom-set-variables ;; Инициализация переменных, указывающих, где
+;;  '(cedet-java-jdk-root (getenv "JAVA_HOME"))
+;;  '(semanticdb-javap-classpath '("/Library/Java/JavaVirtualMachines/jdk1.7.0_67.jdk/Contents/Home/jre/lib/rt.jar"))
+;;  )
+;; (require 'meghanada)
+;; (add-to-list 'auto-mode-alist '("\\.cs$" . java-mode))
+;; (add-hook 'java-mode-hook
+;;           (lambda ()
+;;             ;; meghanada-mode on
+;;             (meghanada-mode t)
+;;             (local-set-key (kbd "M-.") 'meghanada-jump-declaration)
+;;             (local-set-key (kbd "M-,") 'meghanada-back-jump)
+;;             (flycheck-mode +1)
+;;             (setq c-basic-offset 4)
+;;             ;; use code format
+;;             (add-hook 'before-save-hook 'meghanada-code-beautify-before-save)))
+;; (cond
+;;  ((eq system-type 'windows-nt)
+;;   (setq meghanada-java-path (expand-file-name "bin/java.exe" (getenv "JAVA_HOME")))
+;;   (setq meghanada-maven-path "mvn.cmd"))
+;;  (t
+;;   (setq meghanada-java-path "java")
+;;   (setq meghanada-maven-path "mvn")))
+
+(use-package lsp-java :ensure t
+  :config (add-hook 'java-mode-hook #'lsp))
+
+(use-package dap-mode
+  :ensure t :after lsp-mode
+  :config
+  (dap-mode t)
+  (dap-ui-mode t))
+
+;; (require 'lsp-java) 
+;; (add-hook 'java-mode-hook #'lsp)
+;; (add-hook 'java-mode-hook (lambda ()
+;;                             (gradle-mode 1)
+;;                             ))
+(use-package dap-java :after (lsp-java))
+
+;; (use-package dap-mode :after lsp-mode :config (dap-auto-configure-mode))
+;; (use-package dap-java :ensure nil)
+
+;; ==========
+;; rust mode
+;; ==========
+(use-package rust-mode
+  :ensure t
+  :mode (("\\.rs\\'" . rust-mode))
+  ;; :hook ((before-save . gofmt-before-save))
+  :defer t
+  :config
+  (use-package lsp-mode
+    ;; :ensure t
+    :defer t
+    :commands (lsp lsp-deferred)
+    :hook (rust-mode . lsp-deferred)
+    )
+  )
+(with-eval-after-load 'tls
+  (push "/usr/local/etc/libressl/cert.pem" gnutls-trustfiles))
+
+(set-font "Monaco" "YaHei Consolas Hybrid" 14 16)
+
+;; 删除缓存的文件, 当打开文件太多的时候调用
+(defun file-notify-rm-all-watches ()
+  "Remove all existing file notification watches from Emacs."
+  (interactive)
+  (maphash
+   (lambda (key _value)
+     (file-notify-rm-watch key))
+   file-notify-descriptors))

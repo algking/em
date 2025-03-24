@@ -45,7 +45,7 @@ and when jumping back, it will be removed.")
 ;;==============================================================
 ;; 透明函数
 ;;==============================================================
-(eval-when-compile (require 'cl))
+;; (eval-when-compile (require 'cl))
 (defun toggle-transparency ()
   (interactive)
   (if (/=

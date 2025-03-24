@@ -36,7 +36,7 @@
 
 
 (defun my-cc-clang-setup ()
-  (setq my-include-list '("./include" "../include" "./include/event2"))
+  (setq my-include-list '("./include" "../include" "./include/event2" "./lib"))
   "Setup local variables when loading a C/C++ file."
   (setq flycheck-clang-include-path nil)
   (mapc 'check-and-add-header-path my-include-list))
@@ -55,7 +55,7 @@
                   "
                    /Library/Developer/CommandLineTools/usr/bin/../include/c++/v1
                    /usr/local/include
-                   /Library/Developer/CommandLineTools/usr/bin/../lib/clang/7.0.2/include
+                   /Library/Developer/CommandLineTools/usr/bin/../lib/clang/14.0.0/include
                    /Library/Developer/CommandLineTools/usr/include
                    /usr/include
                   "
